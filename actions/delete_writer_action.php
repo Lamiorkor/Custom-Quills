@@ -1,22 +1,22 @@
 <?php
-include ('../controllers/brand_controller.php');
+include ('../controllers/writer_controller.php');
 
-// Get the brand ID from the form submission
-if (isset($_POST['brandID'])) {
-    $brandID = $_POST['brandID'];
+// Get the writer ID from the form submission
+if (isset($_POST['writerID'])) {
+    $writerID = $_POST['writerID'];
 
-     // Call brandController
-     $brand = deleteBrandController($brandID);
+     // Call writerController
+     $writer = deleteWriterController($writerID);
 
-    // Instantiate and delete the brand
-    if ($brand !== false) {
-        // Redirect to brand page with success message
-        echo "Brand deleted successfully!";
-        header("Location:../view/brands.php");
+    // Instantiate and delete the writer
+    if ($writer !== false) {
+        // Redirect to writer page with success message
+        echo "Writer deleted successfully!";
+        header("Location:../view/writers.php");
         exit();
     } else {
-        echo "Error deleting brand";
-        header("Location:../view/brands.php");
+        echo "Error deleting writer";
+        header("Location:../view/writers.php");
         exit();
     }
 }

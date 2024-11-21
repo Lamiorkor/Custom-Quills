@@ -21,8 +21,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_id'] = $user['customer_id'];
             $_SESSION['user_email'] = $user['customer_email'];
             $_SESSION['user_name'] = $user['customer_name'];
+            $_SESSION['user_role'] = $user['user_role'];
 
-            header("Location: ../view/brands.php");
+            if ($_SESSION['user_role'] == 2) {
+                header("Location: ../view/customer_dashboard.php");
+                exit();
+            }
+
+            header("Location: ../view/admin_dashboard.php");
         } else {
             // Redirect back to login page with error message
             header("Location: ../view/login.php");

@@ -16,6 +16,7 @@
     <nav>
         <ul>
             <li><a href="customer_services.php">Services</a></li>
+            <li><a href="customer_writers.php">Writers</a></li>
             <li><a href="customer_orders.php">Orders</a></li>
             <li><a href="customer_contact.php">Contact</a></li>
             <li><a href="logout.php">Logout</a></li>

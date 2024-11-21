@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom Quills - Customer Dashboard</title>
-    <link rel="stylesheet" href="../css/customer_dashboard.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 
 <body>
@@ -16,6 +16,7 @@
     <nav>
         <ul>
             <li><a href="customer_services.php">Services</a></li>
+            <li><a href="customer_writers.php">Writers</a></li>
             <li><a href="customer_orders.php">Orders</a></li>
             <li><a href="customer_contact.php">Contact</a></li>
             <li><a href="logout.php">Logout</a></li>
