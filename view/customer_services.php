@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Quills - Manage Services</title>
+    <title>Custom Quills - View Services</title>
     <link rel="stylesheet" href="../css/services.css"> <!-- External CSS file -->
 </head>
 
@@ -15,12 +15,9 @@
     <!-- Navigation Bar -->
     <nav>
         <ul>
-            <li><a href="writers.php">Writers</a></li>
-            <li><a href="services.php">Services</a></li>
-            <li><a href="categories.php">Categories</a></li>
-            <li><a href="orders.php">Orders</a></li>
-            <li><a href="customers.php">Customers</a></li>
-            <li><a href="contact.php">Contact</a></li>
+            <li><a href="customer_services.php">Services</a></li>
+            <li><a href="customer_orders.php">Orders</a></li>
+            <li><a href="customer_contact.php">Contact</a></li>
             <li><a href="logout.php">Logout</a></li>
         </ul>
     </nav>
@@ -60,14 +57,6 @@
                         echo "<td>" . htmlspecialchars($service['service_desc']) . "</td>";
                         echo "<td>" . htmlspecialchars($service['service_keywords']) . "</td>";
                         echo "<td>
-                              <form action='edit_service.php' method='GET' style='display:inline;'>
-                                <input type='hidden' name='serviceID' value='{$service['service_id']}'>
-                                <button type='submit' class='edit-btn' id='edit-btn'>Edit</button>
-                            </form>
-                            <form action='../actions/delete_service_action.php' method='POST' style='display:inline;'>
-                                <input type='hidden' name='serviceID' value='{$service['service_id']}'>
-                                <button type='submit' name='action' value='delete'>Delete</button>
-                            </form>
                             <form action='../actions/add_to_cart_action.php' method='POST' style='display:inline;'>
                                 <input type='hidden' name='serviceID' value='{$service['service_id']}'>
                                 <button type='submit' class='addCartBtn'>
@@ -85,11 +74,6 @@
             </tbody>
         </table>
     </div>
-
-    <!-- Button to go to the Add New Service page -->
-    <form action="add_service.php" method="GET">
-        <button type="submit" class="addServiceBtn" id="addServiceBtn">Add New Service</button>
-    </form>
 
 </body>
 </html>

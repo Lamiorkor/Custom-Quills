@@ -11,7 +11,7 @@ if (!defined('PASSWORD')) {
     define('PASSWORD','');
 }
 if (!defined('DATABASE')) {
-    define('DATABASE','e-commerce_lab');
+    define('DATABASE','webtech_fall2024_lamiorkor_boye');
 }
 
 ?>

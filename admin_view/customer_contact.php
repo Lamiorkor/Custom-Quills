@@ -7,18 +7,13 @@
     <link rel="stylesheet" href="../css/contact.css">
 </head>
 <body>
-    <!-- <h1>Contact Us</h1>
-    <h3><i>We'd love to hear from you!</i></h3> -->
 
     <!-- Navigation Bar -->
     <nav>
         <ul>
-            <li><a href="writers.php">Writers</a></li>
-            <li><a href="services.php">Services</a></li>
-            <li><a href="categories.php">Categories</a></li>
-            <li><a href="orders.php">Orders</a></li>
-            <li><a href="customers.php">Customers</a></li>
-            <li><a href="contact.php">Contact</a></li>
+            <li><a href="customer_services.php">Services</a></li>
+            <li><a href="customer_orders.php">Orders</a></li>
+            <li><a href="customer_contact.php">Contact</a></li>
             <li><a href="logout.php">Logout</a></li>
         </ul>
     </nav>

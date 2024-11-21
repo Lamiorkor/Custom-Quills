@@ -15,7 +15,7 @@
     <!-- Navigation Bar -->
     <nav>
         <ul>
-            <li><a href="writers.php">Writers</a></li>            <li><a href="services.php">Services</a></li>
+            <li><a href="writers.php">Brands</a></li>            <li><a href="services.php">Services</a></li>
             <li><a href="categories.php">Categories</a></li>
             <li><a href="orders.php">Orders</a></li>
             <li><a href="customers.php">Customers</a></li>

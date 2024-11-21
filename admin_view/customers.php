@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Quills - Manage Orders</title>
-    <link rel="stylesheet" href="../css/orders.css">
+    <title>Custom Quills - Manage Customers</title>
+    <link rel="stylesheet" href="../css/customers.css">
 </head>
 
 <body>
@@ -15,7 +15,8 @@
     <!-- Navigation Bar -->
     <nav>
         <ul>
-            <li><a href="writers.php">Writers</a></li>            <li><a href="services.php">Services</a></li>
+            <li><a href="brands.php">Brands</a></li>
+            <li><a href="services.php">Services</a></li>
             <li><a href="categories.php">Categories</a></li>
             <li><a href="orders.php">Orders</a></li>
             <li><a href="customers.php">Customers</a></li>
@@ -43,7 +44,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>Order</th>
+                    <th>Customer Name</th>
                     <th>Actions</th>
                 </tr>
             </thead>

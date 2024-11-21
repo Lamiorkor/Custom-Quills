@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Quills - Manage Brands</title>
+    <title>Custom Quills - Manage Categories</title>
     <link rel="stylesheet" href="../css/brands.css">
 </head>
 
@@ -30,43 +30,44 @@
         <button class="viewCartBtn">View Cart</button>
     </a>
 
+
     <!-- Form to add a new brand -->
-    <form action="../actions/add_brand_action.php" method="POST" id="brandForm">
-        <label>Brand Name</label>
-        <input type="text" id="brandName" name="brandName" placeholder="Enter brand name" required>
-        <button type="submit" name="action" value="add">Add Brand</button>
+    <form action="../actions/add_category_action.php" method="POST" id="categoryForm">
+        <label>Category Name</label>
+        <input type="text" id="catName" name="catName" placeholder="Enter category name" required>
+        <button type="submit" name="action" value="add">Add Category</button>
     </form>
 
     <!-- Display the list of brands from the database -->
-    <h3>Existing Brands</h3>
-    <div id="brandList">
+    <h3>Existing Categories</h3>
+    <div id="categoryList">
         <table>
             <thead>
                 <tr>
-                    <th>Brand Name</th>
+                    <th>Category Name</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                require('../controllers/brand_controller.php'); // Include the controller
+                require('../controllers/categories_controller.php'); // Include the controller
 
                 // Get and display all brands using the controller
-                $brands = getBrandsController();
-                if ($brands) {
-                    foreach ($brands as $brand) {
+                $categories = getCategoriesController();
+                if ($categories) {
+                    foreach ($categories as $category) {
                         echo "<tr>
-                            <td>{$brand['brand_name']}</td>
+                            <td>{$category['cat_name']}</td>
                             <td>
-                                <form action='../actions/delete_brand_action.php' method='POST'>
-                                    <input type='hidden' name='brandID' value='{$brand['brand_id']}'>
+                                <form action='../actions/delete_category_action.php' method='POST'>
+                                    <input type='hidden' name='catID' value='{$category['cat_id']}'>
                                     <button type='submit' name='action' value='delete'>Delete</button>
                                 </form>
                             </td>
                         </tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='2'>No brands available</td></tr>";
+                    echo "<tr><td colspan='2'>No categories available</td></tr>";
                 }
                 ?>
             </tbody>
