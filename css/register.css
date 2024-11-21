@@ -1,0 +1,100 @@
+body {
+    background: url("../images/custom_quills_logo.png") no-repeat center center fixed; 
+    background-size: cover; 
+    font-family: "Times New Roman", serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    color: black; 
+}
+
+/* Header styles */
+h1 {
+    font-size: 300%;
+    color: #0044cc; /* Blue color for the site title */
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+h3 {
+    font-size: 130%;
+    color: #000; /* Black for the tagline */
+    text-align: center;
+    margin-bottom: 20px; /* Add some space after the tagline */
+}
+
+
+.signup-container {
+    width: 400px;
+    max-height: 80vh; 
+    padding: 20px;
+    background-color: rgba(249, 249, 249, 0.85); 
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2); 
+    border-radius: 10px; 
+    overflow-y: auto; /* Allow scrolling if content exceeds height */
+    z-index: 2; /* Ensures the form is above the background image */
+}
+
+/* Form element spacing */
+form {
+    display: grid;
+    gap: 15px;
+}
+
+/* Label styles */
+label {
+    font-size: 16px;
+    color: #0044cc; 
+}
+
+/* Input fields and button styling */
+input {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+input:focus {
+    border-color: #0044cc; 
+    outline: none;
+}
+
+/* Button styling */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #0044cc; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #003399; 
+}
+
+/* Link to login page */
+.login-link {
+    text-align: center;
+    margin-top: 15px;
+}
+
+a {
+    color: #0044cc; 
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
