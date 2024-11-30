@@ -12,12 +12,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($newCat !== false) {
         // Redirect to brand page with success message
         echo "Category added successfully!";
-        header("Location:../view/categories.php");
+        header("Location:../admin_view/manage_categories.php");
         exit();
     } else {
         // Redirect to brand page with error message
         echo "Addition of category failed. Please try again.";
-        header("Location:../view/category.php");
+        header("Location:../admin_view/manage_categories.php");
         exit();
     }
 }

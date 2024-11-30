@@ -13,7 +13,6 @@ function userIDSessionCheck() {
     } 
 }
 
-
 //function to get user ID
 function userIDCheck(){
     echo $_SESSION['user_id'];

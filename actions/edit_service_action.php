@@ -18,11 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if update was successful
     if ($result) {
         // Redirect to success page or show a success message
-        header("Location: ../view/services.php?status=success");
+        header("Location: ../admin_view/manage_services.php?status=success");
         exit(); // Exit after redirecting
     } else {
         // Redirect to error page or show an error message
-        header("Location: ../view/services.php?status=error");
+        header("Location: ../admin_view/manage_services.php?status=error");
         exit(); // Exit after redirecting
     }
 }

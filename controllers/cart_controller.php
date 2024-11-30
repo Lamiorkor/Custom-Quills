@@ -2,12 +2,12 @@
 // Include the Cart class
 include("../classes/cart_class.php");
 
-function addToCartController($serviceID, $customerID, $quantity) {
+function addToCartController($serviceID, $customerID, $writerID, $quantity) {
     // Create an instance of the Cart class
     $newCartItem = new Cart();
 
     // Return the addCart method
-    return $newCartItem->addToCart($serviceID, $customerID, $quantity);
+    return $newCartItem->addToCart($serviceID, $customerID, $writerID, $quantity);
 }
 
 function deleteCartItemController($serviceID, $customerID) {
@@ -18,12 +18,12 @@ function deleteCartItemController($serviceID, $customerID) {
     return $cart_item->deleteCartItem($serviceID, $customerID);
 }
 
-function getCartItemsController() {
+function getCartItemsController($customerID) {
     // Create an instance of the Cart class
     $cart_items = new Cart();
 
     // Return the getCart method
-    return $cart_items->getCartItems();
+    return $cart_items->getCartItems($customerID);
 }
 
 function getOneCartItemController($serviceID, $customerID) {

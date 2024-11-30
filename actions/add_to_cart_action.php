@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 include ('../controllers/cart_controller.php');
 
 session_start();
@@ -7,10 +11,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve data from form submission
     $serviceID = $_POST['serviceID'];
     $customerID = $_SESSION['user_id'];
+    $writerID = 1;
     $quantity = 1;
 
     // Call addToCartController
-    $newCartItem = addToCartController($serviceID, $customerID, $quantity);
+    $newCartItem = addToCartController($serviceID, $customerID, $writerID, $quantity);
 
     // Check if addition was successful
     if ($newCartItem !== false) {

@@ -5,32 +5,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom Quills - Login</title>
-    <link rel="stylesheet" href="../css/login.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
+<body class="bg-cover bg-center h-screen" style="background-image: url('../images/custom_quills_logo.png');">
 
     <!-- Login form container -->
-    <form action="../actions/login_action.php" name="loginForm" method="POST" id="loginForm">
-        <div class="grid-container">
-            <div class="grid-item">Email Address</div>
-            <div class="grid-item"><input type="email" id="emailInput" name="email" placeholder="Enter your email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" required></div>
+    <div class="flex justify-center items-center h-full">
+        <div class="bg-white shadow-lg rounded-lg p-8 w-96">
+            <h2 class="text-2xl font-bold mb-6 text-center">Sign In</h2>
 
-            <div class="grid-item">Password</div>
-            <div class="grid-item"><input type="password" id="passwordInput" name="password" placeholder="Enter your password" pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" required></div>
-            
-            <div class="grid-item" colspan="2">
-                <button type="submit" name="login"><b>Sign In</b></button>
-            </div>
+            <!-- Error Message -->
+            <?php
+            if (isset($_GET['error'])) {
+                $error = $_GET['error'];
+                echo "<p class='text-red-500 font-medium mb-4'>";
+                if ($error == "empty_fields") {
+                    echo "Please fill in all fields.";
+                } elseif ($error == "incorrect_password") {
+                    echo "Incorrect password. Please try again.";
+                } elseif ($error == "user_not_found") {
+                    echo "User not found. Please register.";
+                } elseif ($error == "login_failed") {
+                    echo "Login failed. Please try again.";
+                }
+                echo "</p>";
+            }
+            ?>
+
+            <!-- Login Form -->
+            <form action="../actions/login_action.php" name="loginForm" method="POST" id="loginForm">
+                <!-- Email Address -->
+                <label for="email" class="block text-gray-700 font-medium mb-2">Email Address:</label>
+                <input type="email" id="emailInput" name="email" placeholder="Enter your email" 
+                       class="border border-gray-300 rounded w-full p-2 mb-4 focus:ring focus:ring-blue-300" required>
+                
+                <!-- Password -->
+                <label for="password" class="block text-gray-700 font-medium mb-2">Password:</label>
+                <input type="password" id="passwordInput" name="password" placeholder="Enter your password" 
+                       class="border border-gray-300 rounded w-full p-2 mb-4 focus:ring focus:ring-blue-300" required>
+                
+                <!-- Submit Button -->
+                <button type="submit" name="login" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full">
+                    Sign In
+                </button>
+            </form>
 
             <!-- Link to sign-up page -->
-            <div class="sign_up-link">
-                <p>Don't have an account? <a href="register.php">Sign Up here</a></p>
-            </div>
+            <p class="text-sm text-gray-600 mt-4 text-center">
+                Don't have an account? <a href="register.php" class="text-blue-500 hover:underline">Sign Up here</a>
+            </p>
         </div>
-    </form>
+    </div>
 
-    <!-- External JS script -->
+    <!-- External JS script for validation -->
     <script src="../js/login.js"></script>
 </body>
 

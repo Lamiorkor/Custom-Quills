@@ -1,48 +1,62 @@
 <?php
-include ("../controllers/customer_controller.php");
+require_once ("../controllers/user_controller.php"); 
 
 // Check if form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (isset($_POST['login'])) {
     // Check if email and password are set and not empty
-    if (isset($_POST["email"]) && isset($_POST["password"]) && !empty($_POST["email"]) && !empty($_POST["password"])) {
+    if (isset($_POST['email'], $_POST['password']) && !empty($_POST['email']) && !empty($_POST['password'])) {
         // Get input values
-        $email = $_POST["email"];
-        $password = $_POST["password"];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
-        // Login user
+        // Attempt login
         $user = loginController($email, $password);
 
-        // Check if login was successful
-        if ($user !== null) {
+        if (is_array($user)) { // Login successful, $user contains user data
             // Start session
             session_start();
 
             // Store user data in session
-            $_SESSION['user_id'] = $user['customer_id'];
-            $_SESSION['user_email'] = $user['customer_email'];
-            $_SESSION['user_name'] = $user['customer_name'];
-            $_SESSION['user_role'] = $user['user_role'];
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['user_name'] = $user['name'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_role'] = $user['role'];
 
-            if ($_SESSION['user_role'] == 2) {
-                header("Location: ../view/customer_dashboard.php");
+            // Redirect based on user role
+            if ($_SESSION['user_role'] === 'customer') { // Customer
+                header("Location: ../customer_view/customer_dashboard.php");
+                exit();
+            } elseif ($_SESSION['user_role'] === 'writer') { // Writer
+                header("Location: ../writer_view/writer_dashboard.php");
+                exit();
+            } elseif ($_SESSION['user_role'] === 'administrator') { // Admin
+                header("Location: ../admin_view/admin_dashboard.php");
+                exit();
+            } else {
+                // Redirect to a general dashboard or error page for undefined roles
+                header("Location: ../view/homepage.php");
                 exit();
             }
-
-            header("Location: ../view/admin_dashboard.php");
-        } else {
-            // Redirect back to login page with error message
-            header("Location: ../view/login.php");
-            echo "Error: You are not registered";
+        } elseif ($user === "Incorrect Password") {
+            // Redirect back with error message
+            header("Location: ../view/login.php?error=incorrect_password");
             exit();
-        } 
+        } elseif ($user === "User not found") {
+            // Redirect back with error message
+            header("Location: ../view/login.php?error=user_not_found");
+            exit();
+        } else {
+            // General error (e.g., database query failed)
+            header("Location: ../view/login.php?error=login_failed");
+            exit();
+        }
     } else {
-        // Redirect back to login page with error message
-        header("Location: ../view/login.php");
-        echo "Error: Empty fields";
+        // Redirect back to login page with error message for empty fields
+        header("Location: ../view/login.php?error=empty_fields");
         exit();
     }
 } else {
-    // Redirect back to login page
+    // Redirect to login page for invalid request methods
     header("Location: ../view/login.php");
     exit();
 }

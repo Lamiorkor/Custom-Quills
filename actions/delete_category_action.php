@@ -12,11 +12,11 @@ if (isset($_POST['catID'])) {
     if ($category !== false) {
         // Redirect to brand page with success message
         echo "Category deleted successfully!";
-        header("Location:../view/categories.php");
+        header("Location:../admin_view/manage_categories.php");
         exit();
     } else {
         echo "Error deleting category";
-        header("Location:../view/categories.php");
+        header("Location:../admin_view/manage_categories.php");
         exit();
     }
 }

@@ -38,22 +38,21 @@ class Service extends db_connection
     }
 
     public function getServices() {
+        $ndb = new db_connection();
+
         // Prepare SQL statement
         $sql = "SELECT `services`.*, `categories`.`cat_name` FROM `services` 
                 JOIN `categories` ON `services`.`service_category` = `categories`.`cat_id`";
     
         // Execute the query and fetch all results
-        $services = $this->db_fetch_all($sql); 
-    
-        // Check if the query was successful
-        if ($services) {
-            // Return all services as an associative array
-            return $services;
-        } else {
-            // Return an empty array if no results
-            return [];
+        $services = $ndb->db_query($sql);
+
+        if($services) {
+            return $ndb->db_fetch_all();
         }
-    }
+  
+      return [];
+  }    
 
     public function getOneService($serviceID) {
         $ndb = new db_connection();

@@ -1,3 +1,10 @@
+<?php
+session_start();
+require_once ('../controllers/cart_controller.php');                    
+// Get and display all cart items using the controller
+$cart_items = getCartItemsController($_SESSION['user_id']);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,10 +48,6 @@
                 <tbody>
 
                     <?php
-                    require('../controllers/cart_controller.php'); // Include the controller
-
-                    // Get and display all cart items using the controller
-                    $cart_items = getCartItemsController();
                     if ($cart_items) {
                         foreach ($cart_items as $cart_item) {
                             echo "<tr>
