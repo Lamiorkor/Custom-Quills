@@ -86,6 +86,11 @@ $writers = getWritersController();
             <p class="text-lg mt-2">View and manage writers' details.</p>
         </header>
 
+        <!-- Add Writer Button -->
+         <div class="mb-4 flex justify-end">
+            <a href="add_writer.php" class="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-600 transition">Add Writer</a>
+        </div>
+
         <!-- Writers Content -->
         <main class="container mx-auto py-8 px-6 flex-1">
             <div class="overflow-x-auto bg-white shadow-md rounded-lg p-6">
@@ -95,18 +100,20 @@ $writers = getWritersController();
                         <tr class="bg-gray-200 text-gray-600 uppercase text-sm">
                             <th class="px-6 py-3 border">Writer Name</th>
                             <th class="px-6 py-3 border">Experience</th>
-                            <th class="px-6 py-3 border">Specialty</th>
+                            <th class="px-6 py-3 border">Speciality</th>
                             <th class="px-6 py-3 border">Rating</th>
+                            <th class="px-6 py-3 border">Availability</th>
                             <th class="px-6 py-3 border">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($writers as $writer): ?>
                             <tr class="hover:bg-gray-100">
-                                <td class="px-6 py-3 border"><?php echo htmlspecialchars($writer['writer_name']); ?></td>
+                                <td class="px-6 py-3 border"><?php echo htmlspecialchars($writer['name']); ?></td>
                                 <td class="px-6 py-3 border"><?php echo htmlspecialchars($writer['years_of_experience']); ?></td>
                                 <td class="px-6 py-3 border"><?php echo htmlspecialchars($writer['speciality']); ?></td>
                                 <td class="px-6 py-3 border"><?php echo htmlspecialchars($writer['rating']); ?></td>
+                                <td class="px-6 py-3 border"><?php echo htmlspecialchars($writer['availability_status']); ?></td>
                                 <td class="px-6 py-3 border text-center">
                                     <form action="edit_writer.php" method="GET" class="inline-block">
                                         <input type="hidden" name="writerID" value="<?php echo $writer['writer_id']; ?>">

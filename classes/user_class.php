@@ -17,13 +17,12 @@ class User extends db_connection
         $user_name = mysqli_real_escape_string($ndb->db_conn(), $name);
         $user_email = mysqli_real_escape_string($ndb->db_conn(), $email);
         $user_password = mysqli_real_escape_string($ndb->db_conn(), $password);
-        $requested_role = mysqli_real_escape_string($ndb->db_conn(), $requestedRole);
 
         $hashed_password = password_hash($user_password, PASSWORD_DEFAULT);
 
         // Insert into users table with pending role
-        $sql = "INSERT INTO `users` (`name`, `email`, `password`, `requested_role`) 
-                VALUES ('$user_name', '$user_email', '$hashed_password', '$requested_role')";
+        $sql = "INSERT INTO `users` (`name`, `email`, `password`) 
+                VALUES ('$user_name', '$user_email', '$hashed_password')";
 
         if ($this->db_query($sql)) {
             $user_id = $this->get_insert_id(); // Get the new user ID
@@ -32,10 +31,19 @@ class User extends db_connection
             $customer_country = mysqli_real_escape_string($ndb->db_conn(), $country);
             $customer_city = mysqli_real_escape_string($ndb->db_conn(), $city);
             $customer_contact = mysqli_real_escape_string($ndb->db_conn(), $phoneNumber);
+            $requested_role = mysqli_real_escape_string($ndb->db_conn(), $requestedRole);
 
             $customerSql = "INSERT INTO `customers` (`user_id`, `country`, `city`, `phone_number`) 
                             VALUES ('$user_id', '$customer_country', '$customer_city', '$customer_contact')";
-            return $this->db_query($customerSql);
+
+            $roleSql = "INSERT INTO `role_requests` (`user_id`, `role_requested`)
+                        VALUES ('$user_id', '$requested_role')";
+
+            if (!$this->db_query($customerSql) || !$this->db_query($roleSql)) {
+                return false;
+            } else {
+                return true;
+            }
         }
 
         return false;
@@ -54,15 +62,23 @@ class User extends db_connection
         $approvedRole = mysqli_real_escape_string($ndb->db_conn(), $approvedRole);
 
         // Update the user's role in the database
-        $sql = "UPDATE `users` SET `role` = '$approvedRole', `requested_role` = NULL 
+        $sql = "UPDATE `users` SET `role` = '$approvedRole'
                 WHERE `user_id` = '$user_id'";
-        return $this->db_query($sql);
+
+        if ($ndb->db_query($sql)) {
+            $roleSql = "DELETE FROM `role_requests` WHERE `user_id` = '$user_id'";
+            return $this->db_query($roleSql);
+        }
+        return false;
     }
 
     public function getPendingRoleRequests()
     {
-        $sql = "SELECT `user_id`, `name`, `email`, `requested_role` FROM `users` 
-                WHERE `role` = 'pending'";
+        $sql = "SELECT `role_requests`.`user_id`, `role_requests`.`role_requested`, `users`.`name`, `users`.`role` 
+                FROM `role_requests` 
+                JOIN `users` ON `role_requests`.`user_id` = `users`.`user_id`
+                WHERE `role_requests`.`status` = 'pending'";
+
         if ($this->db_query($sql)) {
             return $this->db_fetch_all();
         } else {
@@ -121,13 +137,6 @@ class User extends db_connection
 
             if ($row) {
                 if (password_verify($password, $row['password'])) {
-
-                    // session_start();
-                    // $_SESSION['user_id'] = $row['user_id'];
-                    // $_SESSION['user_name'] = $row['name'];
-                    // $_SESSION['user_email'] = $row['email'];
-                    // $_SESSION['role'] = $row['role'];
-
                     return $row; // Login successful
                 } else {
                     return "Incorrect Password";
@@ -144,13 +153,16 @@ class User extends db_connection
      */
     public function getAllWriters()
     {
-        $sql = "SELECT `users`.`user_id`, `users`.`name`, `writers`.`years_of_experience`, `writers`.`speciality`, `writers`.`rating`, `writers`.`availability_status` 
+        $ndb = new db_connection();
+
+        $sql = "SELECT `users`.`user_id`, `users`.`name`, `writers`.`years_of_experience`, `writers`.`speciality`, 
+                        `writers`.`rating`, `writers`.`availability_status` 
                 FROM `users` 
                 INNER JOIN `writers` ON `users`.`user_id` = `writers`.`user_id` 
                 WHERE `users`.`role` = 'writer'";
 
-        if ($this->db_query($sql)) {
-            return $this->db_fetch_all();
+        if ($ndb->db_query($sql)) {
+            return $ndb->db_fetch_all();
         } else {
             return [];
         }
@@ -159,15 +171,17 @@ class User extends db_connection
     public function getAllUsers() 
     {
         $ndb = new db_connection();
-
+    
         $sql = "SELECT * FROM `users`";
-
-        if ($ndb->db_query($sql)) {
-            return $this->db_fetch_all();
+        $result = $ndb->db_query($sql);
+    
+        if ($result) {
+            return $ndb->db_fetch_all(); 
         } else {
-            return [];
+            return []; 
         }
     }
+    
 }
 
 ?>

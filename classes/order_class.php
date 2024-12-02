@@ -7,18 +7,19 @@ require("../settings/db_class.php");
  */
 class Orders extends db_connection
 {
-    public function addOrder($customerID, $invoiceNumber, $orderDate, $status)
+    public function addOrder($customerID, $invoiceNumber, $orderDate, $receiveDate, $totalAmt)
     {
         $ndb = new db_connection();
 
         $customer_id = mysqli_real_escape_string($ndb->db_conn(), $customerID);
         $invoice_no = mysqli_real_escape_string($ndb->db_conn(), $invoiceNumber);
         $order_date = mysqli_real_escape_string($ndb->db_conn(), $orderDate);
-        $order_status = mysqli_real_escape_string($ndb->db_conn(), $status);
+        $receive_date = mysqli_real_escape_string($ndb->db_conn(), $receiveDate);
+        $total_amount = mysqli_real_escape_string($ndb->db_conn(), $totalAmt);
 
-        
         // Prepare SQL statement
-        $sql = "INSERT INTO `orders` (`customer_id`, `invoice_no`, `order_date`, `order_status`) VALUES ('$customer_id', '$invoice_no', '$order_date', '$order_status')";
+        $sql = "INSERT INTO `orders` (`customer_id`, `invoice_no`, `order_date`, `receive_by_date`, `total_amount`) 
+                VALUES ('$customer_id', '$invoice_no', '$order_date', '$receive_date', '$total_amount')";
 
         if ($ndb->db_query($sql)) {
             $insert_id = $ndb->get_insert_id();
@@ -34,17 +35,18 @@ class Orders extends db_connection
         }
     }
 
-    public function addOrderDetails($orderID, $serviceID, $quantity)
+    public function addOrderDetails($orderID, $serviceID, $writerID, $quantity)
     {
         $ndb = new db_connection();
 
         $order_id = mysqli_real_escape_string($ndb->db_conn(), $orderID);
         $service_id = mysqli_real_escape_string($ndb->db_conn(), $serviceID);
+        $writer_id = mysqli_real_escape_string($ndb->db_conn(), $writerID);
         $qty = mysqli_real_escape_string($ndb->db_conn(), $quantity);
-
         
         // Prepare SQL statement
-        $sql = "INSERT INTO `orderdetails` (`order_id`, `service_id`, `qty`) VALUES ('$order_id', '$service_id', '$qty')";
+        $sql = "INSERT INTO `order_details` (`order_id`, `service_id`, `writer_id`, `qty`) 
+                VALUES ('$order_id', '$service_id', '$writer_id', '$qty')";
 
         // Execute query and return result
         return $this->db_query($sql);    
@@ -61,7 +63,7 @@ class Orders extends db_connection
         return $this->db_query($sql);
     }
 
-    function getOrders() {
+    public function getOrders() {
         $ndb = new db_connection();
 
         // Query to fetch categories
@@ -72,14 +74,33 @@ class Orders extends db_connection
         $orders = array();
     
         // Fetch and store the categories in the array
-        if ($result && mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
+        if ($result) {
+            while ($row = $ndb->db_fetch_all()) {
                 $orders[] = $row;
             }
         }
-    
         return $orders;
     }
     
+    function getUsersOrders($userID) {
+        $ndb = new db_connection();
+
+        $user_id = mysqli_real_escape_string($ndb->db_conn(), $userID);
+
+        // Query to fetch categories
+        $sql = "SELECT * FROM `orders` WHERE `user_id` = $user_id";
+        $result = mysqli_query($ndb->db_conn(), $sql);
+    
+        // Initialize an empty array
+        $orders = array();
+    
+        // Fetch and store the categories in the array
+        if ($result) {
+            while ($row = $ndb->db_fetch_all()) {
+                $orders[] = $row;
+            }
+        }
+        return $orders;
+    }
 }
 ?>

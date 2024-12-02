@@ -2,20 +2,20 @@
 // Include the order class
 include("../classes/order_class.php");
 
-function addOrderController($customerID, $invoiceNumber, $orderDate, $status) {
+function addOrderController($customerID, $invoiceNumber, $orderDate, $receiveDate, $totalAmt) {
     // Create an instance of the Order class
     $newOrder = new Orders();
 
     // Return the addOrder method
-    return $newOrder->addOrder($customerID, $invoiceNumber, $orderDate, $status);
+    return $newOrder->addOrder($customerID, $invoiceNumber, $orderDate, $receiveDate, $totalAmt);
 }
 
-function addOrderDetailsController($orderID, $serviceID, $quantity) {
+function addOrderDetailsController($orderID, $serviceID, $writerID, $quantity) {
     // Create an instance of the Order class
     $newOrderDetails = new Orders();
 
     // Return the addBrand method
-    return $newOrderDetails->addOrderDetails($orderID, $serviceID, $quantity);
+    return $newOrderDetails->addOrderDetails($orderID, $serviceID, $writerID, $quantity);
 }
 
 function deleteOrderController($orderID) {
@@ -31,6 +31,14 @@ function getOrdersController() {
 
     // Return the getOrders method
     return $orders->getOrders();
+}
+
+function getUsersOrdersController($userID) {
+    // Create an instance of the Order class
+    $orders = new Orders();
+
+    // Return the getOrders method
+    return $orders->getUsersOrders($userID);
 }
 
 ?>

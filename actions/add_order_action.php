@@ -3,30 +3,32 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+session_start();
 require_once ('../controllers/order_controller.php');
 require_once ('../controllers/cart_controller.php');
-$cartItems = getCartItemsController();
 
-session_start();
+$customer_id = $_SESSION['user_id'];
+$cartItems = getCartItemsController($customer_id);
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve data from form submission
-    $customerID = $_SESSION['user_id'];
     $invoiceNumber = rand(00001, 99999);
     $orderDate = date("Y-m-d");
-    $status = "Pending";
-
+    $receiveDate = $_POST['receive_date'];
+    $totalAmt = $_POST['total_amount'];
 
     // Call addOrderController
-    $newOrder = addOrderController($customerID, $invoiceNumber, $orderDate, $status);
+    $newOrder = addOrderController($customerID, $invoiceNumber, $orderDate, $receiveDate, $totalAmt);
 
     // Check if registration was successful
     if ($newOrder !== false) {
         foreach ($cartItems as $service) {
-            $serviceID = $service['s_id'];
+            $serviceID = $service['service_id'];
+            $writerID = 1;
             $quantity = $service['qty'];
             // Call orderDetailsController
-            $orderDetails = addOrderDetailsController($newOrder, $serviceID, $quantity);
+            $orderDetails = addOrderDetailsController($orderID, $serviceID, $writerID, $quantity);
 
             if (!$orderDetails) {
                 echo "Addition of order details failed. Please try again.";

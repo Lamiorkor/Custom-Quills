@@ -21,12 +21,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($newCartItem !== false) {
         // Redirect to service page with success message
         echo "Item added to cart successfully!";
-        header("Location:../view/services.php");
+        header("Location:../customer_view/customer_services.php");
         exit();
     } else {
         // Redirect to service page with error message
         echo "Addition to cart failed. Please try again.";
-        header("Location:../view/services.php");
+        header("Location:../customer_view/customer_services.php");
         exit();
     } 
 }

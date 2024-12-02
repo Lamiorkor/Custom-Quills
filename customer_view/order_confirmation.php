@@ -12,16 +12,15 @@
     <h1>Custom Quills</h1>
     <h2><i>Poetry made for you</i></h2>
 
-    <!-- Navigation Bar -->
-    <nav>
+<!-- Navigation Bar -->
+<nav>
         <ul>
-            <li><a href="writers.php">Writers</a></li>
-            <li><a href="services.php">Services</a></li>
-            <li><a href="categories.php">Categories</a></li>
-            <li><a href="orders.php">Orders</a></li>
-            <li><a href="customers.php">Customers</a></li>
-            <li><a href="contact.php">Contact</a></li>
-            <li><a href="logout.php">Logout</a></li>
+            <li><a href="customer_services.php">Services</a></li>
+            <li><a href="customer_writers.php">Writers</a></li>
+            <li><a href="customer_orders.php">Orders</a></li>
+            <li><a href="customer_contact.php">Contact</a></li>
+            <li><a href="customer_messages.php" class="text-blue-500 hover:text-blue-700">Messages</a></li>
+            <li><a href="../actions/logout_action.php">Logout</a></li>
         </ul>
     </nav>
 

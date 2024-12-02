@@ -1,4 +1,9 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 $user_name = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : null;
 $role = $_SESSION['user_role'];
@@ -17,10 +22,11 @@ if (!$user_name) {
 } 
 
 // Include user controller
-require('../controllers/user_controller.php');
+require_once ('../controllers/user_controller.php');
 $users = getAllUsersController();
 $pendingUsers = getPendingRoleRequestsController();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -96,7 +102,6 @@ $pendingUsers = getPendingRoleRequestsController();
                     <thead>
                         <tr class="bg-gray-100 text-left">
                             <th class="px-4 py-2 border">User Name</th>
-                            <th class="px-4 py-2 border">Email</th>
                             <th class="px-4 py-2 border">Role</th>
                             <th class="px-4 py-2 border">Actions</th>
                         </tr>
@@ -105,13 +110,18 @@ $pendingUsers = getPendingRoleRequestsController();
                         <?php foreach ($users as $user): ?>
                             <tr class="hover:bg-gray-100">
                                 <td class="px-4 py-2 border"><?php echo htmlspecialchars($user['name']); ?></td>
-                                <td class="px-4 py-2 border"><?php echo htmlspecialchars($user['email']); ?></td>
                                 <td class="px-4 py-2 border"><?php echo htmlspecialchars($user['role']); ?></td>
                                 <td class="px-4 py-2 border text-center">
+                                    <?php if ($user['role'] === 'writer') { ?>
+                                        <form action="manage_writers.php" method="POST">
+                                            <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">Edit</button>
+                                        </form>
+                                    <?php } else { ?>
                                     <form action="edit_user.php" method="GET" class="inline-block">
                                         <input type="hidden" name="userID" value="<?php echo $user['user_id']; ?>">
                                         <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">Edit</button>
                                     </form>
+                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -126,6 +136,7 @@ $pendingUsers = getPendingRoleRequestsController();
                     <thead>
                         <tr class="bg-gray-100 text-left">
                             <th class="px-4 py-2 border">User Name</th>
+                            <th class="px-4 py-2 border">Current Role</th>
                             <th class="px-4 py-2 border">Requested Role</th>
                             <th class="px-4 py-2 border">Actions</th>
                         </tr>
@@ -134,15 +145,17 @@ $pendingUsers = getPendingRoleRequestsController();
                         <?php foreach ($pendingUsers as $pendingUser): ?>
                             <tr class="hover:bg-gray-100">
                                 <td class="px-4 py-2 border"><?php echo htmlspecialchars($pendingUser['name']); ?></td>
-                                <td class="px-4 py-2 border"><?php echo htmlspecialchars($pendingUser['requested_role']); ?></td>
+                                <td class="px-4 py-2 border"><?php echo htmlspecialchars($pendingUser['role']); ?></td>
+                                <td class="px-4 py-2 border"><?php echo htmlspecialchars($pendingUser['role_requested']); ?></td>
                                 <td class="px-4 py-2 border text-center">
                                     <form action="../actions/assign_role_action.php" method="POST" class="inline-block">
                                         <input type="hidden" name="userID" value="<?php echo $pendingUser['user_id']; ?>">
                                         <select name="role" class="border border-gray-300 rounded w-full p-2">
+                                            <option value="administrator">Administrator</option>
                                             <option value="writer">Writer</option>
                                             <option value="customer">Customer</option>
                                         </select>
-                                        <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded mt-2">Assign Role</button>
+                                        <button type="submit" name="updateRole" class="bg-blue-500 text-white px-3 py-1 rounded mt-2">Assign Role</button>
                                     </form>
                                 </td>
                             </tr>

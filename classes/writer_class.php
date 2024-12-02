@@ -8,21 +8,21 @@ require("../settings/db_class.php");
 class Writer extends db_connection
 {
     // Add a new brand to the database
-    public function addWriter($writerName, $yearsOfExperience, $writerSpeciality, $writerRating)
-    {
+    public function addWriter($userID, $yearsOfExperience, $speciality, $rating, $availability) {
         $ndb = new db_connection();
 
-        $name = mysqli_real_escape_string($ndb->db_conn(), $writerName);
-        $experience = mysqli_real_escape_string($ndb->db_conn(), $yearsOfExperience);
-        $speciality = mysqli_real_escape_string($ndb->db_conn(), $writerSpeciality);
-        $rating = mysqli_real_escape_string($ndb->db_conn(), $writerRating);
-
-        // Prepare SQL statement
-        $sql = "INSERT INTO `writers` (`writer_name`, `years_of_experience`, `speciality`, `rating`) VALUES ('$name', '$experience', '$speciality', '$rating')";
-
-        // Execute query and return result
-        return $this->db_query($sql);    
+        $userID = mysqli_real_escape_string($ndb->db_conn(), $userID);
+        $yearsOfExperience = mysqli_real_escape_string($ndb->db_conn(), $yearsOfExperience);
+        $speciality = mysqli_real_escape_string($ndb->db_conn(), $speciality);
+        $rating = mysqli_real_escape_string($ndb->db_conn(), $rating);
+        $availability = mysqli_real_escape_string($ndb->db_conn(), $availability);
+    
+        $sql = "INSERT INTO `writers` (`user_id`, `years_of_experience`, `speciality`, `rating`, `availability_status`) 
+                VALUES ('$userID', '$yearsOfExperience', '$speciality', '$rating', '$availability')";
+    
+        return $ndb->db_query($sql);
     }
+    
 
     public function deleteWriter($writerID) {
         $ndb = new db_connection();
@@ -38,7 +38,9 @@ class Writer extends db_connection
         $ndb = new db_connection();
 
         // Prepare SQL statement
-        $sql = "SELECT * FROM `writers`";
+        $sql = "SELECT `writers`.*, `users`.`name` 
+                FROM `writers`
+                JOIN `users` ON `users`.`user_id` = `writers`.`user_id`";
 
         $result = mysqli_real_escape_string($ndb->db_conn(), $sql);
 

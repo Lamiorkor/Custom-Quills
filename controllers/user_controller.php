@@ -1,4 +1,5 @@
 <?php
+
 // Include the User class
 include "../classes/user_class.php";
 

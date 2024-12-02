@@ -1,5 +1,8 @@
 <?php
 session_start();
+require('../controllers/cart_controller.php'); // Include the controller
+// Get and display all cart items using the controller
+$cart_items = getCartItemsController($_SESSION['user_id']);
 
 ?>
 
@@ -25,7 +28,8 @@ session_start();
             <li><a href="customer_writers.php">Writers</a></li>
             <li><a href="customer_orders.php">Orders</a></li>
             <li><a href="customer_contact.php">Contact</a></li>
-            <li><a href="logout.php">Logout</a></li>
+            <li><a href="customer_messages.php" class="text-blue-500 hover:text-blue-700">Messages</a></li>
+            <li><a href="../actions/logout_action.php">Logout</a></li>
         </ul>
     </nav>
 
@@ -44,10 +48,6 @@ session_start();
                 <tbody>
 
                     <?php
-                    require('../controllers/cart_controller.php'); // Include the controller
-
-                    // Get and display all cart items using the controller
-                    $cart_items = getCartItemsController($_SESSION['user_id']);
                     if ($cart_items) {
                         foreach ($cart_items as $cart_item) {
                             echo "<tr>

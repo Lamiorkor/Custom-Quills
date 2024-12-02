@@ -2,12 +2,9 @@
 // Include the writer class
 include("../classes/writer_class.php");
 
-function addWriterController($writerName, $yearsOfExperience, $writerSpeciality, $writerRating) {
-    // Create an instance of the Writer class
-    $newWriter = new Writer();
-
-    // Return the addWriter method
-    return $newWriter->addWriter($writerName, $yearsOfExperience, $writerSpeciality, $writerRating);
+function addWriterController($userID, $yearsOfExperience, $speciality, $rating, $availability) {
+    $writer = new Writer();
+    return $writer->addWriter($userID, $yearsOfExperience, $speciality, $rating, $availability);
 }
 
 function deleteWriterController($writerID) {

@@ -25,11 +25,10 @@ session_start();
     <nav class="bg-white shadow-md">
         <div class="max-w-7xl mx-auto px-6 py-3">
             <ul class="flex justify-center space-x-6">
-                <li><a href="customer_services.php" class="text-blue-500 hover:text-blue-700">Services</a></li>
-                <li><a href="customer_orders.php" class="text-blue-500 hover:text-blue-700">Orders</a></li>
-                <li><a href="customer_contact.php" class="text-blue-500 hover:text-blue-700">Contact</a></li>
+                <li><a href="../customer_view/customer_services.php" class="text-blue-500 hover:text-blue-700">Services</a></li>
+                <li><a href="../customer_view/customer_contact.php" class="text-blue-500 hover:text-blue-700">Contact</a></li>
                 <?php if(isset($_SESSION['user_role'])) { ?>
-                <li><a href="logout.php" class="text-blue-500 hover:text-blue-700">Logout</a></li>
+                <li><a href="../actions/logout_action.php" class="text-blue-500 hover:text-blue-700">Logout</a></li>
                 <?php } else {?>
                 <li><a href="login.php" class="text-blue-500 hover:text-blue-700">Login</a></li>
                 <li><a href="register.php" class="text-blue-500 hover:text-blue-700">Register</a></li>
