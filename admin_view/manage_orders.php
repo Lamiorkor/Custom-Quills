@@ -18,10 +18,10 @@ if (!$user_name) {
 } elseif ($role === 'writer') {
     header("Location:../writer_view/writer_dashboard.php");
     exit();
-} 
+}
 
 // Include orders controller
-require_once ('../controllers/order_controller.php');
+require_once('../controllers/order_controller.php');
 $orders = getOrdersController();
 ?>
 <!DOCTYPE html>
@@ -112,13 +112,11 @@ $orders = getOrdersController();
                                 <tr>
                                     <td class="border px-4 py-2"><?php echo htmlspecialchars($order['order_id']); ?></td>
                                     <td class="border px-4 py-2"><?php echo htmlspecialchars($order['name']); ?></td>
-                                    <td class="border px-4 py-2"><?php echo htmlspecialchars($order['status']); ?></td>
+                                    <td class="border px-4 py-2"><?php echo htmlspecialchars($order['order_status']); ?></td>
                                     <td class="border px-4 py-2"><?php echo htmlspecialchars($order['receive_by_date']); ?></td>
                                     <td class="border px-4 py-2">
-                                        <form action="../actions/update_order_action.php" method="POST">
-                                            <input type="hidden" name="order_id" value="<?php echo $order['order_id']; ?>">
-                                            <button type="submit" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">Update</button>
-                                        </form>
+                                        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition view-details-btn"
+                                            data-order='<?php echo json_encode($order); ?>'>View Details</button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -139,6 +137,80 @@ $orders = getOrdersController();
             </div>
         </footer>
     </div>
+
+    <!-- Modal Overlay -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 hidden" id="modalOverlay"></div>
+
+    <!-- Modal -->
+    <div class="fixed inset-0 flex items-center justify-center hidden" id="orderModal">
+        <div class="bg-white w-full max-w-md mx-auto rounded-lg shadow-lg p-6">
+            <h3 class="text-xl font-semibold mb-4">Order Details</h3>
+            <div id="modalContent">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+            <button id="closeModal" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 mt-4">Close</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listener to all "View Details" buttons
+            document.querySelectorAll('.view-details-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const order = JSON.parse(this.dataset.order); // Get the order data from the button's data-order attribute
+                    const orderId = order.order_id; // Extract the order_id
+
+                    // Fetch order details via AJAX
+                    fetch('../actions/fetch_order_details_action.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                order_id: orderId
+                            }) // Send only the order_id
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                const orderDetails = data.data;
+
+                                // Populate modal with fetched order details
+                                const detailsHTML = orderDetails.map(detail => `
+                        <p><strong>Service:</strong> ${detail.service_name}</p>
+                        <p><strong>Price:</strong> GHS ${detail.service_price}</p>
+                        <p><strong>Writer:</strong> ${detail.writer_name}</p>
+                        <p><strong>Quantity:</strong> ${detail.qty}</p>
+                    `).join('');
+                                document.getElementById('modalContent').innerHTML = detailsHTML;
+
+                                // Show modal and overlay
+                                document.getElementById('modalOverlay').classList.remove('hidden');
+                                document.getElementById('orderModal').classList.remove('hidden');
+                            } else {
+                                alert(data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching order details:', error);
+                        });
+                });
+            });
+
+            // Close modal when clicking on close button
+            document.getElementById('closeModal').addEventListener('click', () => {
+                document.getElementById('modalOverlay').classList.add('hidden');
+                document.getElementById('orderModal').classList.add('hidden');
+            });
+
+            // Close modal when clicking on the overlay
+            document.getElementById('modalOverlay').addEventListener('click', () => {
+                document.getElementById('modalOverlay').classList.add('hidden');
+                document.getElementById('orderModal').classList.add('hidden');
+            });
+        });
+    </script>
+
 </body>
 
 </html>
