@@ -59,13 +59,6 @@ if (!$user_name) {
                         <i class="fas fa-shopping-cart mr-3"></i> Order Requests
                     </a>
                 </li>
-
-                <li>
-                    <a href="writer_messages.php" class="flex items-center py-3 px-6 text-gray-300 hover:bg-gray-700 hover:text-white">
-                        <i class="fas fa-envelope mr-3"></i> Messages
-                    </a>
-                </li>
-
                 <li>
                     <a href="writer_user_profile.php" class="flex items-center py-3 px-6 text-gray-300 hover:bg-gray-700 hover:text-white">
                         <i class="fas fa-user-circle mr-3"></i> Profile
@@ -87,7 +80,7 @@ if (!$user_name) {
         <!-- Header -->
         <header class="bg-blue-800 text-white text-center py-6">
             <h1 class="text-4xl font-bold">Writer Dashboard</h1>
-            <p class="text-lg mt-2">Manage your orders, messages, and profile.</p>
+            <p class="text-lg mt-2">Manage your orders and profile.</p>
         </header>
 
         <!-- Main Dashboard Content -->

@@ -34,7 +34,7 @@ class Service extends db_connection
         $sql = "DELETE FROM `services` WHERE `service_id` = '$serviceID'";
 
         // Execute query and return result
-        return $this->db_query($sql);
+        return $ndb->db_query($sql);
     }
 
     public function getServices() {

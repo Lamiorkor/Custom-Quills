@@ -49,7 +49,7 @@ $customer = getCustomerDetailsController($user_id); // Fetch additional user dat
     <main class="max-w-3xl mx-auto py-10 px-6 bg-white shadow-md rounded-lg">
         <h2 class="text-2xl font-semibold text-center mb-6">Edit Your Profile</h2>
 
-        <form method="POST" action="../actions/edit_user_action.php">
+        <form method="POST" action="../actions/update_user_profile_action.php">
             <!-- Hidden input for User ID -->
             <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user['user_id']); ?>">
 

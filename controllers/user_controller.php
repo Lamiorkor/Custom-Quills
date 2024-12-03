@@ -110,6 +110,12 @@ function updateUserController($user_id, $user_name, $user_email, $password, $use
     return $user->updateUser($user_id, $user_name, $user_email, $password, $user_role);
 }
 
+function editUserRole($userID, $role)
+{
+    $user = new User();
+    return $user->editUserRole($userID, $role);
+}
+
 function requestRoleChangeController($userID, $requestedRole)
 {
     $user = new User();
@@ -120,6 +126,12 @@ function getCustomerDetailsController($customerID)
 {
     $user = new User();
     return $user->getCustomerDetails($customerID);
+}
+
+function deleteUserController($userID)
+{
+    $user = new User();
+    return $user->deleteUser($userID);
 }
 
 ?>

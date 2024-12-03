@@ -248,6 +248,19 @@ class User extends db_connection
         return false; // Failed to update user
     }
 
+    public function editUserRole($userID, $userRole)
+    {
+        $ndb = new db_connection();
+
+        $user_id = mysqli_real_escape_string($ndb->db_conn(), $userID);
+        $user_role = mysqli_real_escape_string($ndb->db_conn(), $userRole);
+
+        $sql = "UPDATE `users` SET `role` = '$user_role' WHERE `user_id` = '$user_id'";
+
+        return $ndb->db_query($sql);
+
+    }
+
     public function requestRoleChange($userID, $requestedRole) {
         $ndb = new db_connection();
 
@@ -273,6 +286,17 @@ class User extends db_connection
         } else {
             return [];
         }
+    }
+
+    public function deleteUser($userID)
+    {
+        $ndb = new db_connection();
+
+        $user_id = mysqli_real_escape_string($ndb->db_conn(), $userID);
+
+        $sql = "DELETE FROM `users` WHERE `user_id` = '$user_id'";
+
+        return $ndb->db_query($sql);
     }
     
 }

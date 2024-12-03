@@ -102,7 +102,7 @@ $orders = getOrdersController();
                             <th class="border px-4 py-2">Order ID</th>
                             <th class="border px-4 py-2">Customer Name</th>
                             <th class="border px-4 py-2">Status</th>
-                            <th class="border px-4 py-2">Assign Writer</th>
+                            <th class="border px-4 py-2">Receive by Date</th>
                             <th class="border px-4 py-2">Actions</th>
                         </tr>
                     </thead>
@@ -111,19 +111,9 @@ $orders = getOrdersController();
                             <?php foreach ($orders as $order): ?>
                                 <tr>
                                     <td class="border px-4 py-2"><?php echo htmlspecialchars($order['order_id']); ?></td>
-                                    <td class="border px-4 py-2"><?php echo htmlspecialchars($order['customer_name']); ?></td>
+                                    <td class="border px-4 py-2"><?php echo htmlspecialchars($order['name']); ?></td>
                                     <td class="border px-4 py-2"><?php echo htmlspecialchars($order['status']); ?></td>
-                                    <td class="border px-4 py-2">
-                                        <form action="../actions/assign_writer_action.php" method="POST">
-                                            <input type="hidden" name="order_id" value="<?php echo $order['order_id']; ?>">
-                                            <select name="writer_id" class="border border-gray-300 rounded w-full p-2">
-                                                <!-- Populate writer options here -->
-                                                <option value="0">Choose a writer</option>
-                                                <!-- Add writers dynamically -->
-                                            </select>
-                                            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded mt-2">Assign</button>
-                                        </form>
-                                    </td>
+                                    <td class="border px-4 py-2"><?php echo htmlspecialchars($order['receive_by_date']); ?></td>
                                     <td class="border px-4 py-2">
                                         <form action="../actions/update_order_action.php" method="POST">
                                             <input type="hidden" name="order_id" value="<?php echo $order['order_id']; ?>">

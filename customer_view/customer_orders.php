@@ -76,7 +76,8 @@ $cancelledOrders = getUsersOrdersByStatusController($user_id, 'cancelled');
                                 <td class="px-6 py-3 border">GHS <?php echo htmlspecialchars($order['total_amount']); ?></td>
                                 <td class="px-6 py-3 border"><?php echo htmlspecialchars($order['order_status']); ?></td>
                                 <td class="px-6 py-3 border">
-                                    <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">View Details</button>
+                                    <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition view-details-btn"
+                                        data-order='<?php echo json_encode($order); ?>'>View Details</button>
                                     <a href="order_confirmation.php?order_id=<?php echo $order['order_id']; ?>" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition inline-block">Pay</a>
                                     <a href="../actions/cancel_order_action.php?order_id=<?php echo $order['order_id']; ?>"
                                         class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition inline-block">
@@ -157,12 +158,28 @@ $cancelledOrders = getUsersOrdersByStatusController($user_id, 'cancelled');
         </div>
     </main>
 
+    <!-- Modal Overlay -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 hidden" id="modalOverlay"></div>
+
+    <!-- Modal -->
+    <div class="fixed inset-0 flex items-center justify-center hidden" id="orderModal">
+        <div class="bg-white w-full max-w-md mx-auto rounded-lg shadow-lg p-6">
+            <h3 class="text-xl font-semibold mb-4">Order Details</h3>
+            <div id="modalContent">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+            <button id="closeModal" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 mt-4">Close</button>
+        </div>
+    </div>
+
     <!-- Footer Section -->
     <footer class="bg-blue-500 text-white py-6">
         <div class="container mx-auto px-6 text-center">
             <p>&copy; <?php echo date("Y"); ?> Custom Quills. All rights reserved.</p>
         </div>
     </footer>
+
+    <script src="../js/customer_orders.js"></script>
 
 </body>
 

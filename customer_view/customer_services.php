@@ -62,7 +62,7 @@ $services = getServicesController();
                         <p class='text-gray-600 mt-4'>" . htmlspecialchars($service['service_desc']) . "</p>
                         <form action='add_order.php' method='GET' class='mt-4'>
                             <input type='hidden' name='serviceID' value='{$service['service_id']}'>
-                            <button type='submit' class='bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition'>Add to Cart</button>
+                            <button type='submit' class='bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition'>Order Service</button>
                         </form>
                     </div>";
                 }

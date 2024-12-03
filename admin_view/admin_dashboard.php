@@ -114,7 +114,7 @@ if (!$user_name) {
                 <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition">
                     <h2 class="text-xl font-semibold text-gray-800">Manage Users</h2>
                     <p class="text-gray-600 mt-2">Add, edit, or delete users on the platform.</p>
-                    <a href="manage_users.php" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">Go to Writers</a>
+                    <a href="manage_users.php" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">Go to Users</a>
                 </div>
 
                 <!-- Services Card -->
@@ -142,7 +142,7 @@ if (!$user_name) {
                 <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition">
                     <h2 class="text-xl font-semibold text-gray-800">Manage Messages</h2>
                     <p class="text-gray-600 mt-2">View and respond to customer messages.</p>
-                    <a href="manage_messages.php" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">Go to Orders</a>
+                    <a href="manage_messages.php" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">Go to Messages</a>
                 </div>
             </div>
         </main>

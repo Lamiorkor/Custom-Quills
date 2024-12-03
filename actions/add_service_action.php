@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($newService !== false) {
         // Redirect to service page with success message
         echo "Service added successfully!";
-        header("Location:.../admin_view/manage_services.php");
+        header("Location:../admin_view/manage_services.php");
         exit();
     } else {
         // Redirect to service page with error message

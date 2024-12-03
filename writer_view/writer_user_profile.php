@@ -1,6 +1,11 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
-include('../controllers/user_controller.php');
+include('../controllers/writer_controller.php');
 
 // Ensure the writer is logged in
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'writer') {
@@ -8,7 +13,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'writer') {
     exit();
 }
 
-$writer = getOneWriterController($_SESSION['user_id']);
+$user_id = $_SESSION['user_id'];
+$writer = getOneWriterController($user_id);
 
 ?>
 
@@ -30,11 +36,20 @@ $writer = getOneWriterController($_SESSION['user_id']);
         <h2 class="italic text-xl mt-2">Your Profile</h2>
     </header>
 
+    <!-- Breadcrumb -->
+    <nav class="bg-gray-200 py-3 px-6">
+        <ol class="flex space-x-2 text-sm">
+            <li><a href="writer_dashboard.php" class="text-blue-500 hover:text-blue-700">Dashboard</a></li>
+            <li class="text-gray-500">/</li>
+            <li class="text-gray-700">Edit Profile</li>
+        </ol>
+    </nav>
+
     <!-- Main Content Section -->
     <main class="max-w-3xl mx-auto py-10 px-6 bg-white shadow-md rounded-lg">
         <h2 class="text-2xl font-semibold text-center mb-6">Edit Your Profile</h2>
 
-        <form method="POST" action="../actions/edit_user_action.php">
+        <form method="POST" action="../actions/update_user_profile_action.php">
             <!-- Hidden input for User ID -->
             <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($writer['user_id']); ?>">
 

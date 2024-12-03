@@ -89,7 +89,7 @@ class Writer extends db_connection
         $writerID = mysqli_real_escape_string($ndb->db_conn(), $writerID);
 
         // SQL query to select a single writer by ID
-        $sql = "SELECT `writers`.*, `users`.`name` FROM `writers` 
+        $sql = "SELECT `writers`.*, `users`.`name`, `users`.`email` FROM `writers` 
                 JOIN `users` ON `writers`.`user_id` = `users`.`user_id`
                 WHERE `writer_id` = '$writerID' LIMIT 1";
 
@@ -121,12 +121,18 @@ class Writer extends db_connection
 
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        $sql = "UPDATE `writers` 
-            SET `writer_name` = '$user_name', `email` = '$user_email', `password` = '$hashed_password', 
-                `years_of_experience` = '$years_of_experience', `speciality` = '$speciality', `availability_status` = '$availability'
-            WHERE `writer_id` = '$user_id'";
+        $sql = "UPDATE `users` SET `name` = '$user_name', `email` = '$user_email', 
+                `password` = '$hashed_password' WHERE `user_id` = '$user_id'";
 
-        return $ndb->db_query($sql);
+        $writerSql = "UPDATE `writers` SET `years_of_experience` = '$years_of_experience', `speciality` = '$speciality', 
+                    `availability_status` = '$availability'
+                    WHERE `writers`.`user_id` = '$user_id'";
+
+        if ($ndb->db_query($sql) && $ndb->db_query($writerSql)) {
+            return true; 
+        } else {
+            return false;
+        }
     }
 
 

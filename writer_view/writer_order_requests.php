@@ -34,7 +34,6 @@ $orders = getWriterRequestsController($_SESSION['user_id']);
             <ul class="space-y-4">
                 <li><a href="writer_dashboard.php" class="flex items-center py-3 px-6 text-gray-300 hover:bg-gray-700 hover:text-white"><i class="fas fa-tachometer-alt mr-3"></i> Dashboard</a></li>
                 <li><a href="writer_order_requests.php" class="flex items-center py-3 px-6 text-gray-300 hover:bg-gray-700 hover:text-white"><i class="fas fa-shopping-cart mr-3"></i> Order Requests</a></li>
-                <li><a href="writer_messages.php" class="flex items-center py-3 px-6 text-gray-300 hover:bg-gray-700 hover:text-white"><i class="fas fa-envelope mr-3"></i> Messages</a></li>
                 <li><a href="writer_user_profile.php" class="flex items-center py-3 px-6 text-gray-300 hover:bg-gray-700 hover:text-white"><i class="fas fa-user-circle mr-3"></i> Profile</a></li>
             </ul>
         </nav>

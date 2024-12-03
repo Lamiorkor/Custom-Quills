@@ -121,6 +121,10 @@ $pendingUsers = getPendingRoleRequestsController();
                                         <input type="hidden" name="userID" value="<?php echo $user['user_id']; ?>">
                                         <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">Edit</button>
                                     </form>
+                                    <form action="../actions/delete_user_action.php" method="POST" class="inline-block">
+                                        <input type="hidden" name="userID" value="<?php echo $user['user_id']; ?>">
+                                        <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition">Delete</button>
+                                    </form>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

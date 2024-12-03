@@ -75,7 +75,9 @@ class Orders extends db_connection
         $ndb = new db_connection();
 
         // Query to fetch categories
-        $sql = "SELECT * FROM `orders`";
+        $sql = "SELECT `orders`.*, `users`.`name` 
+                FROM `orders` 
+                JOIN `users` ON `users`.`user_id` = `orders`.`customer_id`";
         $result = $ndb->db_query($sql);
 
         if ($result) {
@@ -116,23 +118,31 @@ class Orders extends db_connection
         return $result['service_price'] ?? 0.00;
     }
 
-    public function getOrderDetails($orderID) {
+    public function getOrderDetails($orderID)
+    {
         $ndb = new db_connection();
+
         $order_id = mysqli_real_escape_string($ndb->db_conn(), $orderID);
 
-        // Prepare SQL statement
-        $sql = "SELECT * FROM `orders` WHERE `order_id` = '$order_id' LIMIT 1";
+        $sql = "SELECT `od`.*, `s`.`service_name`, `s`.`service_price`, `o`.`total_amount`, `u`.`name` AS `writer_name` 
+                FROM `order_details` `od`
+                JOIN `services` `s` ON `od`.`service_id` = `s`.`service_id`
+                JOIN `orders` `o` ON `od`.`order_id` = `o`.`order_id`
+                JOIN `writers` `w` ON `od`.`writer_id` = `w`.`writer_id`
+                JOIN `users` `u` ON `w`.`user_id` = `u`.`user_id`
+                WHERE `od`.`order_id` = '$order_id'";
 
-        // Execute query and return the result
         $result = $ndb->db_query($sql);
 
         if ($result) {
             return $ndb->db_fetch_one($sql);
         }
+
         return [];
     }
 
-    public function updateOrderStatus($orderID, $status) {
+    public function updateOrderStatus($orderID, $status)
+    {
         $ndb = new db_connection();
 
         $order_id = mysqli_real_escape_string($ndb->db_conn(), $orderID);
@@ -142,7 +152,8 @@ class Orders extends db_connection
         return $ndb->db_query($sql);
     }
 
-    public function deleteOrderDetails($orderID) {
+    public function deleteOrderDetails($orderID)
+    {
         $ndb = new db_connection();
 
         $order_id = mysqli_real_escape_string($ndb->db_conn(), $orderID);
@@ -151,7 +162,7 @@ class Orders extends db_connection
         return $ndb->db_query($sql);
     }
 
-    public function getCustomerOrderDetails($orderID) 
+    public function getCustomerOrderDetails($orderID)
     {
         $ndb = new db_connection();
 
@@ -175,23 +186,21 @@ class Orders extends db_connection
         return [];
     }
 
-    public function getUsersOrdersByStatus($userID, $status) {
+    public function getUsersOrdersByStatus($userID, $status)
+    {
         $ndb = new db_connection();
-    
+
         $user_id = mysqli_real_escape_string($ndb->db_conn(), $userID);
         $order_status = mysqli_real_escape_string($ndb->db_conn(), $status);
-    
+
         // Query to fetch orders filtered by status
         $sql = "SELECT * FROM `orders` WHERE `customer_id` = '$user_id' AND `order_status` = '$order_status'";
         $result = $ndb->db_query($sql);
-    
+
         if ($result) {
             return $ndb->db_fetch_all(); // Fetch all rows
         }
-    
+
         return [];
     }
-    
 }
-
-?>

@@ -40,7 +40,7 @@ if (isset($data['reference']) && isset($data['order_id'])) {
 
         // Record payment and update order status
         addPaymentController($amount, $_SESSION['user_id'], $order_id, $currency, $reference, $payment_date);
-        updateOrderStatusController($order_id, "Paid");
+        updateOrderStatusController($order_id, 'paid');
 
         echo json_encode(["status" => "success"]);
         exit();
