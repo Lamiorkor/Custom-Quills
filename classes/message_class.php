@@ -1,75 +1,90 @@
 <?php
-require("../settings/db_class.php");
+require_once ("../settings/db_class.php");
 
 class Message extends db_connection
 {
-    public function addMessage($userID, $content)
+    // Send a contact message from customer
+    public function sendContactMessage($user_id, $message_content)
     {
-        $userID = mysqli_real_escape_string($this->db_conn(), $userID);
-        $content = mysqli_real_escape_string($this->db_conn(), $content);
+        $ndb = new db_connection();
 
-        $sql = "INSERT INTO `messages` (`user_id`, `content`, `is_read`, `date_created`) 
-                VALUES ('$userID', '$content', false, NOW())";
+        // Ensure inputs are valid and prevent SQL injection
+        $user_id = mysqli_real_escape_string($ndb->db_conn(), $user_id);
+        $message_content = mysqli_real_escape_string($ndb->db_conn(), $message_content);
+        $time_sent = date('Y-m-d H:i:s');
+
+        $sql = "INSERT INTO `contact` (`user_id`, `message`, `is_read`, `time_sent`) 
+                VALUES ('$user_id', '$message_content', 0, '$time_sent')";
 
         return $this->db_query($sql);
     }
 
-    public function getMessages()
+    // Get messages for admin (messages that have been sent to the admin)
+    public function getAdminMessages()
     {
-        $sql = "SELECT m.message_id, m.user_id, m.content, m.is_read, m.date_created, m.reply, u.name, u.email
-                FROM `messages` m
-                JOIN `users` u ON m.user_id = u.user_id
-                ORDER BY m.date_created DESC";
+        $ndb = new db_connection();
 
-        if ($this->db_query($sql)) {
-            return $this->db_fetch_all();
+        $sql = "SELECT c.*, u.name, u.email 
+                FROM contact c
+                JOIN users u ON c.user_id = u.user_id
+                WHERE c.is_read = 0";  // only unread messages
+
+        $result = $ndb->db_query($sql);
+
+        if ($result) {
+            return $ndb->db_fetch_all();
         }
+
         return [];
     }
 
-    public function getCustomerMessages($userID)
+    // Mark a message as read
+    public function markContactMessageAsRead($message_id)
     {
-        $userID = mysqli_real_escape_string($this->db_conn(), $userID);
+        $ndb = new db_connection();
 
-        $sql = "SELECT message_id, content, reply, date_created, is_read 
-                FROM `messages` 
-                WHERE `user_id` = '$userID'
-                ORDER BY `date_created` DESC";
+        // Ensure message_id is valid and prevent SQL injection
+        $message_id = mysqli_real_escape_string($ndb->db_conn(), $message_id);
 
-        if ($this->db_query($sql)) {
-            return $this->db_fetch_all();
-        }
-        return [];
-    }
-
-    public function saveReply($messageID, $reply)
-    {
-        $messageID = mysqli_real_escape_string($this->db_conn(), $messageID);
-        $reply = mysqli_real_escape_string($this->db_conn(), $reply);
-
-        $sql = "UPDATE `messages` SET `reply` = '$reply', `is_read` = false WHERE `message_id` = '$messageID'";
+        $sql = "UPDATE `contact` SET `is_read` = 1 WHERE `contact_id` = '$message_id'";
 
         return $this->db_query($sql);
     }
 
-    public function sendMessage($senderID, $receiverID, $content) {
+    // Save admin reply to a message
+    public function replyToMessage($message_id, $reply_content)
+    {
         $ndb = new db_connection();
-        $senderID = mysqli_real_escape_string($ndb->db_conn(), $senderID);
-        $receiverID = mysqli_real_escape_string($ndb->db_conn(), $receiverID);
-        $content = mysqli_real_escape_string($ndb->db_conn(), $content);
 
-        $sql = "INSERT INTO `messages` (`sender_id`, `receiver_id`, `content`, `is_read`, `date_created`) 
-                VALUES ('$senderID', '$receiverID', '$content', false, NOW())";
+        // Ensure inputs are valid and prevent SQL injection
+        $message_id = mysqli_real_escape_string($ndb->db_conn(), $message_id);
+        $reply_content = mysqli_real_escape_string($ndb->db_conn(), $reply_content);
+        $time_sent = date('Y-m-d H:i:s');
 
-        return $ndb->db_query($sql);
+        $sql = "UPDATE `contact` SET `reply` = '$reply_content', `time_sent` = '$time_sent' 
+                WHERE `contact_id` = '$message_id'";
+
+        return $this->db_query($sql);
     }
 
-    public function getMessagesByUser($userID) {
+    // Get contact form messages for a specific customer
+    public function getCustomerContactMessages($user_id)
+    {
         $ndb = new db_connection();
-        $userID = mysqli_real_escape_string($ndb->db_conn(), $userID);
 
-        $sql = "SELECT * FROM `messages` WHERE `receiver_id` = '$userID' ORDER BY `date_created` DESC";
-        return $ndb->db_fetch_all($sql);
+        // Ensure user_id is valid and prevent SQL injection
+        $user_id = mysqli_real_escape_string($ndb->db_conn(), $user_id);
+
+        $sql = "SELECT * FROM `contact` WHERE `user_id` = '$user_id' ORDER BY `time_sent` DESC";
+
+        $result = $ndb->db_query($sql);
+
+        if ($result) {
+            return $ndb->db_fetch_all();
+        }
+
+        return [];
     }
+
 }
 ?>

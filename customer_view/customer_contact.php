@@ -30,18 +30,19 @@
         </div>
     </nav>
 
+    <!-- User Profile Button -->
+    <div class="fixed top-0 right-0 m-4">
+        <?php if (isset($_SESSION['user_id'])) { ?>
+            <a href="customer_user_profile.php">
+                <button class="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-700">View Profile</button>
+            </a>
+        <?php } ?>
+    </div>
+
     <!-- Contact Form -->
     <main class="max-w-3xl mx-auto py-10 px-6 flex-1 bg-white shadow-md rounded-lg">
         <h2 class="text-2xl font-semibold mb-6 text-center">Get in Touch</h2>
-        <form action="../actions/contact_action.php" method="POST" class="space-y-6">
-            <div>
-                <label for="name" class="block text-gray-700 font-semibold">Your Name:</label>
-                <input type="text" id="name" name="name" class="w-full border border-gray-300 rounded-lg p-2" required>
-            </div>
-            <div>
-                <label for="email" class="block text-gray-700 font-semibold">Your Email:</label>
-                <input type="email" id="email" name="email" class="w-full border border-gray-300 rounded-lg p-2" required>
-            </div>
+        <form action="../actions/send_contact_action.php" method="POST">
             <div>
                 <label for="message" class="block text-gray-700 font-semibold">Message:</label>
                 <textarea id="message" name="message" rows="5" class="w-full border border-gray-300 rounded-lg p-2" required></textarea>
@@ -50,6 +51,7 @@
                 Send Message
             </button>
         </form>
+
     </main>
 
     <!-- Footer -->

@@ -21,8 +21,8 @@ if (!$user_name) {
 }
 
 // Include messages controller
-require_once ('../controllers/message_controller.php');
-$messages = getMessagesController();
+require_once('../controllers/message_controller.php');
+$messages = getMessagesController();  // Fetch unread messages for admin
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -100,10 +100,10 @@ $messages = getMessagesController();
                     <?php foreach ($messages as $message): ?>
                         <div class="border-b border-gray-200 py-4">
                             <p class="font-semibold"><?php echo htmlspecialchars($message['name']); ?> (<?php echo htmlspecialchars($message['email']); ?>)</p>
-                            <p class="text-sm text-gray-600"><?php echo nl2br(htmlspecialchars($message['content'])); ?></p>
-                            <p class="text-gray-500 text-xs mt-1">Date: <?php echo htmlspecialchars($message['date_created']); ?> | Read: <?php echo $message['is_read'] ? 'Yes' : 'No'; ?></p>
+                            <p class="text-sm text-gray-600"><?php echo nl2br(htmlspecialchars($message['message'])); ?></p>
+                            <p class="text-gray-500 text-xs mt-1">Date: <?php echo htmlspecialchars($message['time_sent']); ?> | Read: <?php echo $message['is_read'] ? 'Yes' : 'No'; ?></p>
                             <form action="../actions/reply_message_action.php" method="POST" class="mt-4">
-                                <input type="hidden" name="message_id" value="<?php echo $message['message_id']; ?>">
+                                <input type="hidden" name="message_id" value="<?php echo $message['contact_id']; ?>">
                                 <textarea name="reply" rows="4" placeholder="Reply to this message" class="border border-gray-300 rounded w-full p-2 mt-2" required><?php echo htmlspecialchars($message['reply']); ?></textarea>
                                 <button type="submit" name="action" value="reply" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mt-2">
                                     Save Reply
@@ -116,7 +116,6 @@ $messages = getMessagesController();
                 <?php endif; ?>
             </div>
         </main>
-
 
         <!-- Footer Section -->
         <footer class="bg-blue-800 text-white py-6">

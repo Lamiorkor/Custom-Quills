@@ -181,6 +181,99 @@ class User extends db_connection
             return []; 
         }
     }
+
+    public function getOneUserDetails($userID) {
+        $ndb = new db_connection();
+
+        $user_id = mysqli_real_escape_string($ndb->db_conn(), $userID);
+
+        $sql = "SELECT * FROM `users` WHERE `user_id` = '$user_id'";
+        $result = $ndb->db_query($sql);
+
+        if ($result) {
+            return $this->db_fetch_one($sql);
+        } else {
+            return [];
+        }
+    }
+
+    // Update user information
+    public function updateUser($userID, $userName, $userEmail, $password, $userRole, $country = null, $city = null, $phoneNumber = null, $yearsOfExperience = null, $speciality = null, $availability = null)
+    {
+        $ndb = new db_connection();
+
+        $user_id = mysqli_real_escape_string($ndb->db_conn(), $userID);
+        $user_name = mysqli_real_escape_string($ndb->db_conn(), $userName);
+        $user_email = mysqli_real_escape_string($ndb->db_conn(), $userEmail);
+        $password = mysqli_real_escape_string($ndb->db_conn(), $password);
+        $user_role = mysqli_real_escape_string($ndb->db_conn(), $userRole);
+
+        // Hash the password
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        // Update the user's basic details
+        $sql = "UPDATE `users` 
+                SET `name` = '$user_name', `email` = '$user_email', `password` = '$hashed_password', `role` = '$user_role'
+                WHERE `user_id` = '$user_id'";
+
+        if ($ndb->db_query($sql)) {
+            // Handle customer-specific data
+            if ($user_role == 'customer') {
+                $customer_country = mysqli_real_escape_string($ndb->db_conn(), $country);
+                $customer_city = mysqli_real_escape_string($ndb->db_conn(), $city);
+                $customer_contact = mysqli_real_escape_string($ndb->db_conn(), $phoneNumber);
+
+                $customerSql = "UPDATE `customers` 
+                                SET `country` = '$customer_country', `city` = '$customer_city', `phone_number` = '$customer_contact'
+                                WHERE `user_id` = '$user_id'";
+
+                return $ndb->db_query($customerSql);
+            }
+            // Handle writer-specific data
+            elseif ($user_role == 'writer') {
+                $years_of_experience = mysqli_real_escape_string($ndb->db_conn(), $yearsOfExperience);
+                $speciality = mysqli_real_escape_string($ndb->db_conn(), $speciality);
+                $availability = mysqli_real_escape_string($ndb->db_conn(), $availability);
+
+                $writerSql = "UPDATE `writers` 
+                              SET `years_of_experience` = '$years_of_experience', `speciality` = '$speciality', `availability_status` = '$availability'
+                              WHERE `user_id` = '$user_id'";
+
+                return $ndb->db_query($writerSql);
+            }
+
+            return true; // Basic user details updated
+        }
+
+        return false; // Failed to update user
+    }
+
+    public function requestRoleChange($userID, $requestedRole) {
+        $ndb = new db_connection();
+
+        $user_id = mysqli_real_escape_string($ndb->db_conn(), $userID);
+        $requested_role = mysqli_real_escape_string($ndb->db_conn(), $requestedRole);
+
+        $sql = "INSERT INTO `role_requests` (`user_id`, `role_requested`)
+                VALUES ('$user_id', '$requested_role')";
+
+        return $ndb->db_query($sql);
+    }
+
+    public function getCustomerDetails($userID) {
+        $ndb = new db_connection();
+
+        $user_id = mysqli_real_escape_string($ndb->db_conn(), $userID);
+
+        $sql = "SELECT * FROM `customers` WHERE `user_id` = '$user_id'";
+        $result = $ndb->db_query($sql);
+
+        if ($result) {
+            return $this->db_fetch_one($sql);
+        } else {
+            return [];
+        }
+    }
     
 }
 

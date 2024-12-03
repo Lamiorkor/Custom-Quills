@@ -96,5 +96,30 @@ function getAllUsersController()
     return $user->getAllUsers();
 }
 
+function getOneUserDetailsController($userID)
+{
+    // Create an instance of the User class
+    $user = new User();
+
+    // Call the getAllUsers method
+    return $user->getOneUserDetails($userID);
+}
+
+function updateUserController($user_id, $user_name, $user_email, $password, $user_role) {
+    $user = new User();
+    return $user->updateUser($user_id, $user_name, $user_email, $password, $user_role);
+}
+
+function requestRoleChangeController($userID, $requestedRole)
+{
+    $user = new User();
+    return $user->requestRoleChange($userID, $requestedRole);
+}
+
+function getCustomerDetailsController($customerID) 
+{
+    $user = new User();
+    return $user->getCustomerDetails($customerID);
+}
 
 ?>

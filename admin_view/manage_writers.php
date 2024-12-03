@@ -86,6 +86,8 @@ $writers = getWritersController();
             <p class="text-lg mt-2">View and manage writers' details.</p>
         </header>
 
+        <br>
+        
         <!-- Add Writer Button -->
          <div class="mb-4 flex justify-end">
             <a href="add_writer.php" class="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-600 transition">Add Writer</a>
@@ -99,7 +101,7 @@ $writers = getWritersController();
                     <thead>
                         <tr class="bg-gray-200 text-gray-600 uppercase text-sm">
                             <th class="px-6 py-3 border">Writer Name</th>
-                            <th class="px-6 py-3 border">Experience</th>
+                            <th class="px-6 py-3 border">Years of Experience</th>
                             <th class="px-6 py-3 border">Speciality</th>
                             <th class="px-6 py-3 border">Rating</th>
                             <th class="px-6 py-3 border">Availability</th>

@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 $user_name = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : null;
 $role = $_SESSION['user_role'];
@@ -17,7 +21,7 @@ if (!$user_name) {
 } 
 
 // Include orders controller
-require_once ('../controllers/orders_controller.php');
+require_once ('../controllers/order_controller.php');
 $orders = getOrdersController();
 ?>
 <!DOCTYPE html>

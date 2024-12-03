@@ -22,11 +22,16 @@ function getWritersController() {
     return $writers->getWriters();
 }
 
-function updateWriterController($writerID, $writerName, $yearsOfExperience, $writerSpeciality, $writerRating, $writerAvailability) {
+function adminUpdateWriterController($writerID, $yearsOfExperience, $writerSpeciality, $writerRating, $writerAvailability) {
     $writer = new Writer();
 
     // Return the updateWriter method
-    return $writer->updateWriter($writerID, $writerName, $yearsOfExperience, $writerSpeciality, $writerRating, $writerAvailability);
+    return $writer->adminUpdateWriter($writerID, $yearsOfExperience, $writerSpeciality, $writerRating, $writerAvailability);
+}
+
+function updateWriterController($user_id, $user_name, $user_email, $password, $years_of_experience, $speciality, $availability) {
+    $writer = new Writer();
+    return $writer->updateWriter($user_id, $user_name, $user_email, $password, $years_of_experience, $speciality, $availability);
 }
 
 function getOneWriterController($writerID) {
@@ -35,4 +40,24 @@ function getOneWriterController($writerID) {
     // Return the getWriter method
     return $writer->getOneWriter($writerID);
 }
+
+function addWriterRequestsController($orderID, $writerID, $orderStatus, $dateCreated) {
+    $writer = new Writer();
+    return $writer->addWriterRequest($orderID, $writerID, $orderStatus, $dateCreated);
+}
+
+function getWriterRequestsController($writerID) {
+    $writer = new Writer();
+    return $writer->getWriterRequests($writerID);
+}
+
+function acceptOrderController($writerID, $orderID)
+{
+    // Create an instance of the Writer class
+    $writer = new Writer();
+
+    // Call the method to update the order status to 'in progress'
+    return $writer->acceptOrder($writerID, $orderID);
+}
+
 ?>

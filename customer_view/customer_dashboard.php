@@ -35,11 +35,13 @@ $user_name = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : "Guest";
         </div>
     </nav>
 
-    <!-- View Cart Button -->
+    <!-- User Profile Button -->
     <div class="fixed top-0 right-0 m-4">
-        <a href="cart.php">
-            <button class="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-green-700">View Cart</button>
-        </a>
+        <?php if (isset($_SESSION['user_id'])) { ?>
+            <a href="customer_user_profile.php">
+                <button class="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-700">View Profile</button>
+            </a>
+        <?php } ?>
     </div>
 
     <!-- Main Content Section -->

@@ -14,7 +14,7 @@ if (!$user_name) {
 } elseif ($role === 'writer') {
     header("Location:../writer_view/writer_dashboard.php");
     exit();
-} 
+}
 
 ?>
 
@@ -97,6 +97,15 @@ if (!$user_name) {
             <h1 class="text-4xl font-bold">Admin Dashboard</h1>
             <p class="text-lg mt-2">Manage your platform efficiently.</p>
         </header>
+
+        <!-- User Profile Button -->
+        <div class="fixed top-0 right-0 m-4">
+            <?php if (isset($_SESSION['user_id'])) { ?>
+                <a href="admin_user_profile.php">
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-700">View Profile</button>
+                </a>
+            <?php } ?>
+        </div>
 
         <!-- Main Dashboard Content -->
         <main class="container mx-auto py-8 px-6 flex-1">

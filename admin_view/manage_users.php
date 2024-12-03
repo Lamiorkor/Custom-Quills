@@ -19,10 +19,10 @@ if (!$user_name) {
 } elseif ($role === 'writer') {
     header("Location:../writer_view/writer_dashboard.php");
     exit();
-} 
+}
 
 // Include user controller
-require_once ('../controllers/user_controller.php');
+require_once('../controllers/user_controller.php');
 $users = getAllUsersController();
 $pendingUsers = getPendingRoleRequestsController();
 ?>
@@ -93,6 +93,11 @@ $pendingUsers = getPendingRoleRequestsController();
             <p class="text-lg mt-2">View and manage users' roles on the platform.</p>
         </header>
 
+        <!-- Add Manage Writers Button -->
+        <div class="mb-4 text-right">
+            <a href="manage_writers.php" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">Manage Writers</a>
+        </div>
+
         <!-- Main Content -->
         <main class="container mx-auto py-8 px-6 flex-1">
             <!-- Users Table -->
@@ -112,16 +117,10 @@ $pendingUsers = getPendingRoleRequestsController();
                                 <td class="px-4 py-2 border"><?php echo htmlspecialchars($user['name']); ?></td>
                                 <td class="px-4 py-2 border"><?php echo htmlspecialchars($user['role']); ?></td>
                                 <td class="px-4 py-2 border text-center">
-                                    <?php if ($user['role'] === 'writer') { ?>
-                                        <form action="manage_writers.php" method="POST">
-                                            <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">Edit</button>
-                                        </form>
-                                    <?php } else { ?>
                                     <form action="edit_user.php" method="GET" class="inline-block">
                                         <input type="hidden" name="userID" value="<?php echo $user['user_id']; ?>">
                                         <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">Edit</button>
                                     </form>
-                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

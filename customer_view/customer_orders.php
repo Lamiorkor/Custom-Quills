@@ -1,9 +1,19 @@
 <?php
 session_start();
 include('../controllers/order_controller.php');
-$user_id = $_SESSION['user_id'];
-$orders = getUsersOrdersController($user_id);
 
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];
+
+// Fetch orders by status
+$pendingOrders = getUsersOrdersByStatusController($user_id, 'pending');
+$inProgressOrders = getUsersOrdersByStatusController($user_id, 'in-progress');
+$completedOrders = getUsersOrdersByStatusController($user_id, 'completed');
+$cancelledOrders = getUsersOrdersByStatusController($user_id, 'cancelled');
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +31,7 @@ $orders = getUsersOrdersController($user_id);
     <!-- Header Section -->
     <header class="bg-blue-500 text-white p-6 text-center">
         <h1 class="text-3xl font-bold">Custom Quills</h1>
-        <h2 class="italic text-xl mt-2">Poetry made for you</h2>
+        <h2 class="italic text-xl mt-2">Your Orders</h2>
     </header>
 
     <!-- Navigation Bar -->
@@ -40,38 +50,108 @@ $orders = getUsersOrdersController($user_id);
 
     <!-- Main Content Section -->
     <main class="max-w-7xl mx-auto px-6 py-10 flex-1">
-        <h3 class="text-2xl font-semibold text-center">Your Orders</h3>
-        <div class="mt-8 bg-white shadow-md rounded-lg p-6">
+        <h3 class="text-2xl font-semibold text-center mb-6">Your Orders</h3>
+
+        <!-- Pending/In Progress Orders -->
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+            <h4 class="text-lg font-semibold mb-4">Pending & In-Progress Orders</h4>
             <table class="table-auto w-full text-left">
                 <thead>
                     <tr class="bg-gray-200 text-gray-600 uppercase text-sm">
                         <th class="px-6 py-3 border">Invoice Number</th>
                         <th class="px-6 py-3 border">Order Date</th>
-                        <th class="px-6 py-3 border">Status</th>
+                        <th class="px-6 py-3 border">Receive By</th>
+                        <th class="px-6 py-3 border">Total Amount</th>
+                        <th class="px-6 py-3 border">Order Status</th>
                         <th class="px-6 py-3 border">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    if (!empty($orders)) {
-                        foreach ($orders as $order) {
-                            echo "
-                            <tr class='text-gray-700 border-t hover:bg-gray-100'>
-                                <td class='px-6 py-3 border'>{$order['invoice_no']}</td>
-                                <td class='px-6 py-3 border'>{$order['order_date']}</td>
-                                <td class='px-6 py-3 border'>{$order['order_status']}</td>
-                                <td class='px-6 py-3 border'>
-                                    <form action='../actions/delete_order_action.php' method='POST' class='inline-block'>
-                                        <input type='hidden' name='orderID' value='{$order['order_id']}'>
-                                        <button type='submit' class='bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition'>Delete</button>
-                                    </form>
+                    <?php if (!empty($pendingOrders) || !empty($inProgressOrders)): ?>
+                        <?php foreach (array_merge($pendingOrders, $inProgressOrders) as $order): ?>
+                            <tr class="text-gray-700 border-t hover:bg-gray-100">
+                                <td class="px-6 py-3 border"><?php echo htmlspecialchars($order['invoice_no']); ?></td>
+                                <td class="px-6 py-3 border"><?php echo htmlspecialchars($order['date_ordered']); ?></td>
+                                <td class="px-6 py-3 border"><?php echo htmlspecialchars($order['receive_by_date']); ?></td>
+                                <td class="px-6 py-3 border">GHS <?php echo htmlspecialchars($order['total_amount']); ?></td>
+                                <td class="px-6 py-3 border"><?php echo htmlspecialchars($order['order_status']); ?></td>
+                                <td class="px-6 py-3 border">
+                                    <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">View Details</button>
+                                    <a href="order_confirmation.php?order_id=<?php echo $order['order_id']; ?>" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition inline-block">Pay</a>
+                                    <a href="../actions/cancel_order_action.php?order_id=<?php echo $order['order_id']; ?>"
+                                        class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition inline-block">
+                                        Cancel
+                                    </a>
                                 </td>
-                            </tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='4' class='text-center text-gray-500 py-4'>No orders found.</td></tr>";
-                    }
-                    ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="6" class="text-center text-gray-500 py-4">No pending or in-progress orders found.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Completed Orders -->
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+            <h4 class="text-lg font-semibold mb-4">Completed Orders</h4>
+            <table class="table-auto w-full text-left">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-600 uppercase text-sm">
+                        <th class="px-6 py-3 border">Invoice Number</th>
+                        <th class="px-6 py-3 border">Order Date</th>
+                        <th class="px-6 py-3 border">Receive By</th>
+                        <th class="px-6 py-3 border">Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($completedOrders)): ?>
+                        <?php foreach ($completedOrders as $order): ?>
+                            <tr class="text-gray-700 border-t hover:bg-gray-100">
+                                <td class="px-6 py-3 border"><?php echo htmlspecialchars($order['invoice_no']); ?></td>
+                                <td class="px-6 py-3 border"><?php echo htmlspecialchars($order['date_ordered']); ?></td>
+                                <td class="px-6 py-3 border"><?php echo htmlspecialchars($order['receive_by_date']); ?></td>
+                                <td class="px-6 py-3 border">GHS <?php echo htmlspecialchars($order['total_amount']); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="4" class="text-center text-gray-500 py-4">No completed orders found.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Cancelled Orders -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h4 class="text-lg font-semibold mb-4">Cancelled Orders</h4>
+            <table class="table-auto w-full text-left">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-600 uppercase text-sm">
+                        <th class="px-6 py-3 border">Invoice Number</th>
+                        <th class="px-6 py-3 border">Order Date</th>
+                        <th class="px-6 py-3 border">Receive By</th>
+                        <th class="px-6 py-3 border">Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($cancelledOrders)): ?>
+                        <?php foreach ($cancelledOrders as $order): ?>
+                            <tr class="text-gray-700 border-t hover:bg-gray-100">
+                                <td class="px-6 py-3 border"><?php echo htmlspecialchars($order['invoice_no']); ?></td>
+                                <td class="px-6 py-3 border"><?php echo htmlspecialchars($order['date_ordered']); ?></td>
+                                <td class="px-6 py-3 border"><?php echo htmlspecialchars($order['receive_by_date']); ?></td>
+                                <td class="px-6 py-3 border">GHS <?php echo htmlspecialchars($order['total_amount']); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="4" class="text-center text-gray-500 py-4">No cancelled orders found.</td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>

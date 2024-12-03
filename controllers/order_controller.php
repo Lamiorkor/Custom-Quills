@@ -2,20 +2,15 @@
 // Include the order class
 include("../classes/order_class.php");
 
-function addOrderController($customerID, $invoiceNumber, $orderDate, $receiveDate, $totalAmt) {
-    // Create an instance of the Order class
-    $newOrder = new Orders();
-
-    // Return the addOrder method
-    return $newOrder->addOrder($customerID, $invoiceNumber, $orderDate, $receiveDate, $totalAmt);
+function addOrderController($customerID,  $invoiceNumber, $receiveByDate, $expressDelivery, $expressCharge, $baseTotal, $totalAmount, $instructions) {
+    $order = new Orders();
+    return $order->addOrder($customerID,  $invoiceNumber, $receiveByDate, $expressDelivery, $expressCharge, $baseTotal, $totalAmount, $instructions);
 }
 
-function addOrderDetailsController($orderID, $serviceID, $writerID, $quantity) {
-    // Create an instance of the Order class
-    $newOrderDetails = new Orders();
 
-    // Return the addBrand method
-    return $newOrderDetails->addOrderDetails($orderID, $serviceID, $writerID, $quantity);
+function addOrderDetailsController($orderID, $serviceID, $writerID, $qty) {
+    $order = new Orders();
+    return $order->addOrderDetails($orderID, $serviceID, $writerID, $qty);
 }
 
 function deleteOrderController($orderID) {
@@ -40,5 +35,38 @@ function getUsersOrdersController($userID) {
     // Return the getOrders method
     return $orders->getUsersOrders($userID);
 }
+
+
+function getServicePriceController($serviceID) {
+    $order = new Orders();
+    return $order->getServicePrice($serviceID);
+}
+
+function getOrderDetailsController($orderID) {
+    $order = new Orders();
+    return $order->getOrderDetails($orderID);
+}
+
+function updateOrderStatusController($order_id, $status) {
+    $order = new Orders();
+    return $order->updateOrderStatus($order_id, $status);
+}
+
+function deleteOrderDetailsController($order_id) {
+    $order = new Orders();
+    return $order->deleteOrderDetails($order_id);
+}
+
+function getCustomerOrderDetailsController($orderID)
+{
+    $order = new Orders();
+    return $order->getCustomerOrderDetails($orderID);
+}
+
+function getUsersOrdersByStatusController($userID, $status) {
+    $orders = new Orders();
+    return $orders->getUsersOrdersByStatus($userID, $status);
+}
+
 
 ?>

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.1deb3
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Dec 02, 2024 at 08:18 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Host: localhost:3306
+-- Generation Time: Dec 03, 2024 at 08:17 PM
+-- Server version: 8.0.40-0ubuntu0.24.04.1
+-- PHP Version: 8.3.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,12 +28,19 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `cart` (
-  `cart_id` int(11) NOT NULL,
-  `service_id` int(11) NOT NULL,
-  `customer_id` int(11) NOT NULL,
-  `writer_id` int(11) NOT NULL,
-  `qty` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `cart_id` int NOT NULL,
+  `service_id` int NOT NULL,
+  `customer_id` int NOT NULL,
+  `writer_id` int NOT NULL,
+  `qty` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`cart_id`, `service_id`, `customer_id`, `writer_id`, `qty`) VALUES
+(4, 1, 4, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -42,9 +49,9 @@ CREATE TABLE `cart` (
 --
 
 CREATE TABLE `categories` (
-  `cat_id` int(11) NOT NULL,
+  `cat_id` int NOT NULL,
   `cat_name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `categories`
@@ -65,25 +72,12 @@ INSERT INTO `categories` (`cat_id`, `cat_name`) VALUES
 --
 
 CREATE TABLE `contact` (
-  `contact_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `message` text NOT NULL,
-  `reply` text NOT NULL,
-  `is_read` tinyint(1) NOT NULL DEFAULT 0,
+  `contact_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `message` text COLLATE utf8mb4_general_ci NOT NULL,
+  `reply` text COLLATE utf8mb4_general_ci NOT NULL,
+  `is_read` tinyint(1) NOT NULL DEFAULT '0',
   `time_sent` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `conversations`
---
-
-CREATE TABLE `conversations` (
-  `conversation_id` int(11) NOT NULL,
-  `user1_id` int(11) NOT NULL,
-  `user2_id` int(11) NOT NULL,
-  `last_message_time` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -93,11 +87,11 @@ CREATE TABLE `conversations` (
 --
 
 CREATE TABLE `customers` (
-  `customer_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `country` varchar(100) NOT NULL,
-  `city` varchar(100) NOT NULL,
-  `phone_number` varchar(20) NOT NULL
+  `customer_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `country` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `city` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `phone_number` varchar(20) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -112,33 +106,30 @@ INSERT INTO `customers` (`customer_id`, `user_id`, `country`, `city`, `phone_num
 -- --------------------------------------------------------
 
 --
--- Table structure for table `messages`
---
-
-CREATE TABLE `messages` (
-  `message_id` int(11) NOT NULL,
-  `sender_id` int(11) NOT NULL,
-  `receiver_id` int(11) NOT NULL,
-  `content` text NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
-  `is_read` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `orders`
 --
 
 CREATE TABLE `orders` (
-  `order_id` int(11) NOT NULL,
-  `customer_id` int(11) NOT NULL,
-  `invoice_no` int(11) NOT NULL,
-  `date_ordered` datetime NOT NULL DEFAULT current_timestamp(),
+  `order_id` int NOT NULL,
+  `customer_id` int NOT NULL,
+  `invoice_no` int NOT NULL,
+  `date_ordered` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `receive_by_date` datetime NOT NULL,
+  `express_delivery` tinyint(1) NOT NULL DEFAULT '0',
+  `express_charge` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `base_total_amount` decimal(10,2) NOT NULL,
   `total_amount` decimal(10,2) NOT NULL,
-  `order_status` enum('pending','paid','completed','received') NOT NULL DEFAULT 'pending'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `order_status` enum('pending','in progress','completed','cancelled','paid') NOT NULL DEFAULT 'pending',
+  `instructions` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`order_id`, `customer_id`, `invoice_no`, `date_ordered`, `receive_by_date`, `express_delivery`, `express_charge`, `base_total_amount`, `total_amount`, `order_status`, `instructions`) VALUES
+(11, 4, 76226, '2024-12-03 01:19:29', '2024-12-05 00:00:00', 1, 30.00, 20.00, 50.00, 'pending', 'The poem is for my sister\'s birthday. She is turning 12 and loves pancakes.'),
+(12, 4, 83850, '2024-12-03 01:37:19', '2024-12-05 00:00:00', 1, 30.00, 20.00, 50.00, 'pending', 'My mum passed...');
 
 -- --------------------------------------------------------
 
@@ -147,12 +138,20 @@ CREATE TABLE `orders` (
 --
 
 CREATE TABLE `order_details` (
-  `order_detail_id` int(11) NOT NULL,
-  `order_id` int(11) NOT NULL,
-  `service_id` int(11) NOT NULL,
-  `writer_id` int(11) NOT NULL,
-  `qty` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `order_detail_id` int NOT NULL,
+  `order_id` int NOT NULL,
+  `service_id` int NOT NULL,
+  `writer_id` int NOT NULL,
+  `qty` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `order_details`
+--
+
+INSERT INTO `order_details` (`order_detail_id`, `order_id`, `service_id`, `writer_id`, `qty`) VALUES
+(7, 11, 1, 5, 1),
+(8, 12, 6, 5, 1);
 
 -- --------------------------------------------------------
 
@@ -161,13 +160,14 @@ CREATE TABLE `order_details` (
 --
 
 CREATE TABLE `payment` (
-  `pay_id` int(11) NOT NULL,
-  `amt` double NOT NULL,
-  `customer_id` int(11) NOT NULL,
-  `order_id` int(11) NOT NULL,
+  `pay_id` int NOT NULL,
+  `amt` decimal(10,2) NOT NULL,
+  `customer_id` int NOT NULL,
+  `order_id` int NOT NULL,
   `currency` text NOT NULL,
-  `payment_date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `reference` varchar(255) NOT NULL,
+  `payment_date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -176,18 +176,11 @@ CREATE TABLE `payment` (
 --
 
 CREATE TABLE `role_requests` (
-  `request_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `role_requested` enum('administrator','writer','customer') NOT NULL,
-  `status` enum('pending','approved','denied') NOT NULL DEFAULT 'pending'
+  `request_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `role_requested` enum('administrator','writer','customer') COLLATE utf8mb4_general_ci NOT NULL,
+  `status` enum('pending','approved','denied') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `role_requests`
---
-
-INSERT INTO `role_requests` (`request_id`, `user_id`, `role_requested`, `status`) VALUES
-(2, 4, 'customer', 'pending');
 
 -- --------------------------------------------------------
 
@@ -196,12 +189,12 @@ INSERT INTO `role_requests` (`request_id`, `user_id`, `role_requested`, `status`
 --
 
 CREATE TABLE `services` (
-  `service_id` int(3) NOT NULL,
-  `service_name` varchar(45) NOT NULL,
-  `service_category` int(3) NOT NULL,
+  `service_id` int NOT NULL,
+  `service_name` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `service_category` int NOT NULL,
   `service_price` float NOT NULL,
-  `service_desc` text NOT NULL,
-  `service_keywords` text NOT NULL
+  `service_desc` text COLLATE utf8mb4_general_ci NOT NULL,
+  `service_keywords` text COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -212,9 +205,7 @@ INSERT INTO `services` (`service_id`, `service_name`, `service_category`, `servi
 (1, 'Birthday poem', 1, 20, 'Happy birthday poem', 'Birthday, Happy, Hurray'),
 (3, 'Retirement poem', 3, 20, 'Congratulations poem', 'Retirement, Happy, Hurray'),
 (6, 'Funeral poem', 3, 20, 'Sad poem', 'Funeral, Sad, Mourning'),
-(10, 'Banku and Kelewele Poem', 1, 10, 'For the love of food', 'Food, Banku, Party, KFC'),
-(13, 'Gymmie', 1, 25, 'Give love to your gym', 'gym, love, poem'),
-(14, 'Singing Poem', 2, 20, 'Happiness is real', 'song, happy');
+(10, 'Banku and Kelewele Poem', 1, 20, 'For the love of food', 'Food, Banku, Party, KFC');
 
 -- --------------------------------------------------------
 
@@ -223,11 +214,11 @@ INSERT INTO `services` (`service_id`, `service_name`, `service_category`, `servi
 --
 
 CREATE TABLE `users` (
-  `user_id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `email` varchar(45) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` enum('administrator','writer','customer','pending') NOT NULL DEFAULT 'customer'
+  `user_id` int NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `role` enum('administrator','writer','customer','pending') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'customer'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -246,12 +237,12 @@ INSERT INTO `users` (`user_id`, `name`, `email`, `password`, `role`) VALUES
 --
 
 CREATE TABLE `writers` (
-  `writer_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `years_of_experience` int(11) NOT NULL,
-  `speciality` varchar(100) NOT NULL,
+  `writer_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `years_of_experience` int NOT NULL,
+  `speciality` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `rating` decimal(2,1) NOT NULL,
-  `availability_status` enum('available','unavailable') NOT NULL DEFAULT 'available'
+  `availability_status` enum('available','unavailable') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'available'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -268,11 +259,11 @@ INSERT INTO `writers` (`writer_id`, `user_id`, `years_of_experience`, `specialit
 --
 
 CREATE TABLE `writer_requests` (
-  `request_id` int(11) NOT NULL,
-  `order_id` int(11) NOT NULL,
-  `writer_id` int(11) NOT NULL,
-  `status` enum('pending','accepted','rejected') NOT NULL DEFAULT 'pending',
-  `date_created` datetime NOT NULL DEFAULT current_timestamp()
+  `request_id` int NOT NULL,
+  `order_id` int NOT NULL,
+  `writer_id` int NOT NULL,
+  `status` enum('pending','accepted','rejected') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'pending',
+  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -300,22 +291,10 @@ ALTER TABLE `contact`
   ADD PRIMARY KEY (`contact_id`);
 
 --
--- Indexes for table `conversations`
---
-ALTER TABLE `conversations`
-  ADD PRIMARY KEY (`conversation_id`);
-
---
 -- Indexes for table `customers`
 --
 ALTER TABLE `customers`
   ADD PRIMARY KEY (`customer_id`);
-
---
--- Indexes for table `messages`
---
-ALTER TABLE `messages`
-  ADD PRIMARY KEY (`message_id`);
 
 --
 -- Indexes for table `orders`
@@ -385,85 +364,73 @@ ALTER TABLE `writer_requests`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `cart_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `cat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `cat_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `contact`
 --
 ALTER TABLE `contact`
-  MODIFY `contact_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `conversations`
---
-ALTER TABLE `conversations`
-  MODIFY `conversation_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `contact_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `messages`
---
-ALTER TABLE `messages`
-  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `customer_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `order_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `order_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `order_detail_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `pay_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pay_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `role_requests`
 --
 ALTER TABLE `role_requests`
-  MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `request_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `services`
 --
 ALTER TABLE `services`
-  MODIFY `service_id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `service_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `writers`
 --
 ALTER TABLE `writers`
-  MODIFY `writer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `writer_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `writer_requests`
 --
 ALTER TABLE `writer_requests`
-  MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `request_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables

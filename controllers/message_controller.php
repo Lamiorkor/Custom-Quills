@@ -1,38 +1,40 @@
 <?php
-require("../classes/message_class.php");
+// Include the Message class
+include "../classes/message_class.php";
 
-function addMessageController($userID, $content)
+// Send a message from customer to admin
+function sendContactMessageController($user_id, $message_content)
 {
-    $messages = new Message();
-    return $messages->addMessage($userID, $content);
+    $message = new Message();
+    return $message->sendContactMessage($user_id, $message_content);
 }
 
+// Get unread messages for admin
 function getMessagesController()
 {
-    $messages = new Message();
-    return $messages->getMessages();
+    $message = new Message();
+    return $message->getAdminMessages();
 }
 
-function getCustomerMessagesController($userID)
+// Reply to a customer message
+function replyMessageController($message_id, $reply_content)
 {
-    $messages = new Message();
-    return $messages->getCustomerMessages($userID);
+    $message = new Message();
+    return $message->replyToMessage($message_id, $reply_content);
 }
 
-function saveReplyController($messageID, $reply)
+// Mark message as read
+function markContactMessageAsReadController($message_id)
 {
-    $messages = new Message();
-    return $messages->saveReply($messageID, $reply);
+    $message = new Message();
+    return $message->markContactMessageAsRead($message_id);
 }
 
-function sendMessageController($senderID, $receiverID, $message) {
-    $messageObj = new Message();
-    return $messageObj->sendMessage($senderID, $receiverID, $message);
+function getCustomerContactMessagesController($userID) 
+{
+    $message = new Message();
+    return $message->getCustomerContactMessages($userID);
 }
 
-function getMessagesForConversationController($userID) {
-    $messageObj = new Message();
-    return $messageObj->getMessagesByUser($userID);
-}
 
 ?>

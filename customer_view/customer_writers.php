@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once ('../controllers/writer_controller.php');
+require_once('../controllers/writer_controller.php');
 $writers = getWritersController();
 
 ?>
@@ -38,6 +38,15 @@ $writers = getWritersController();
         </div>
     </nav>
 
+    <!-- User Profile Button -->
+    <div class="fixed top-0 right-0 m-4">
+        <?php if (isset($_SESSION['user_id'])) { ?>
+            <a href="customer_user_profile.php">
+                <button class="bg-green-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-700">View Profile</button>
+            </a>
+        <?php } ?>
+    </div>
+
     <!-- Main Content Section -->
     <main class="max-w-7xl mx-auto px-6 py-10 flex-1">
         <h3 class="text-2xl font-semibold text-center">Meet Our Writers</h3>
@@ -47,13 +56,9 @@ $writers = getWritersController();
                 foreach ($writers as $writer) {
                     echo "
                     <div class='bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition'>
-                        <h5 class='text-lg font-semibold text-blue-500'>{$writer['writer_name']}</h5>
+                        <h5 class='text-lg font-semibold text-blue-500'>{$writer['name']}</h5>
                         <p class='text-gray-600 mt-2'>Experience: {$writer['years_of_experience']} years</p>
                         <p class='text-gray-600'>Specialties: {$writer['speciality']}</p>
-                        <form action='../actions/book_writer_action.php' method='POST' class='mt-4'>
-                            <input type='hidden' name='writerID' value='{$writer['writer_id']}'>
-                            <button type='submit' class='bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition'>Book Writer</button>
-                        </form>
                     </div>";
                 }
             } else {

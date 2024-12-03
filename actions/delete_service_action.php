@@ -12,11 +12,11 @@ if (isset($_POST['serviceID'])) {
     if ($service !== false) {
         // Redirect to service page with success message
         echo "Service deleted successfully!";
-        header("Location:../view/services.php");
+        header("Location:../admin_view/manage_services.php");
         exit();
     } else {
         echo "Error deleting service";
-        header("Location:../view/services.php");
+        header("Location:../admin_view/manage_services.php");
         exit();
     }
 }
